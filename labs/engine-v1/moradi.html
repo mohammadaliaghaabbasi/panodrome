@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Moradi Real-Content Set — بازبینی ۱۰ پنورامای یک خانه (Kuula/Mojtaba87) · Panodrome R&amp;D</title>
+<!--
+  PANODROME ENGINE UPGRADE V1.1 — MORADI REAL-CONTENT REVIEW PAGE (owner review)
+  Branch: engine-upgrade-v1 · R&D ONLY — nothing here is published to main / production.
+  Source of all 10 panoramas: kuula.co/profile/Mojtaba87 (credited per card + footer).
+  This set REPLACES the previous 10-page engine test corpus (site rooms untouched).
+  Self-contained: no CDN, no build step, no JS. Static HTML + local thumbs only.
+-->
+<style>
+  :root{
+    --bg:#080c0b; --panel:#0e1513; --panel2:#121b18; --line:#1d2b27;
+    --ink:#d7e6df; --dim:#8fa8a0; --faint:#5f7a72;
+    --green:#57e6a4; --green-dim:rgba(87,230,164,.14);
+    --amber:#ffd97f; --amber-dim:rgba(255,217,127,.10);
+    --red:#ff8f8f; --blue:#8fd0ff; --violet:#c9a6ff;
+    --mono:ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:'Vazirmatn','Vazirmatn UI','Segoe UI',Tahoma,sans-serif;
+       font-size:15px;line-height:1.75}
+  code,.mono{font-family:var(--mono);font-size:.92em}
+  a{color:var(--green);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 18px 70px}
+
+  /* top bar */
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(8,12,11,.92);backdrop-filter:blur(6px);
+          border-bottom:1px solid var(--line);padding:9px 18px;display:flex;gap:14px;align-items:center;
+          justify-content:space-between;flex-wrap:wrap}
+  .topbar .brand{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.4px}
+  .topbar .brand b{color:var(--green)}
+  .topbar nav{display:flex;gap:14px;font-size:12.5px}
+  .chip{display:inline-block;padding:1px 10px;border-radius:20px;font-size:11.5px;
+        border:1px solid var(--line);color:var(--dim);font-family:var(--mono)}
+  .chip.branch{color:var(--green);border-color:rgba(87,230,164,.4);background:var(--green-dim)}
+  .chip.rnd{color:var(--amber);border-color:rgba(255,217,127,.4);background:var(--amber-dim)}
+
+  /* hero */
+  header.hero{padding:34px 0 10px}
+  .hero h1{margin:0 0 6px;font-size:26px;line-height:1.5}
+  .hero .en{font-family:var(--mono);font-size:12.5px;color:var(--dim);margin:0 0 14px}
+  .hero p.lead{margin:0 0 16px;color:var(--ink);max-width:74ch}
+  .meta-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+
+  /* attribution banner */
+  .attribution{border:1px solid rgba(255,217,127,.45);background:var(--amber-dim);
+               border-radius:12px;padding:14px 18px;margin:18px 0;font-size:14px}
+  .attribution .t{color:var(--amber);font-weight:700}
+  .attribution .src{font-family:var(--mono);font-size:12.5px;direction:ltr;text-align:left}
+
+  /* verdict strip */
+  .verdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:20px 0}
+  .vcell{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center}
+  .vcell .n{font-family:var(--mono);font-size:20px;color:var(--green);display:block;line-height:1.3}
+  .vcell .l{font-size:12px;color:var(--dim)}
+  .verdict-line{background:var(--green-dim);border:1px solid rgba(87,230,164,.4);border-radius:12px;
+                padding:12px 18px;margin:0 0 30px}
+  .verdict-line b{color:var(--green)}
+
+  /* sections */
+  section{margin:38px 0}
+  h2{font-size:19px;margin:0 0 4px;color:var(--ink)}
+  h2 .en{font-family:var(--mono);font-size:11.5px;color:var(--faint);font-weight:400;margin-inline-start:10px}
+  .sub{color:var(--dim);font-size:13.5px;margin:0 0 16px;max-width:80ch}
+
+  /* funnel + zones */
+  .funnel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+  .fstep{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+         padding:7px 13px;font-size:13px}
+  .fstep b{font-family:var(--mono);color:var(--green)}
+  .farrow{color:var(--faint);font-family:var(--mono)}
+  .zones{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-top:14px}
+  .zone{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 15px}
+  .zone h3{margin:0 0 4px;font-size:14.5px;color:var(--ink)}
+  .zone h3 .cnt{font-family:var(--mono);font-size:11px;color:var(--green);margin-inline-start:6px}
+  .zone p{margin:0;font-size:12.8px;color:var(--dim)}
+  .zone .pair{color:var(--violet);font-size:12px;font-family:var(--mono)}
+
+  /* scene cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:16px}
+  @media (max-width:520px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+        display:flex;flex-direction:column}
+  .card img{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;background:#000;
+            border-bottom:1px solid var(--line)}
+  .card .body{padding:13px 16px 15px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .card .head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .card .head .room{font-size:16px;font-weight:700}
+  .card .head .sid{font-family:var(--mono);font-size:11.5px;color:var(--green);direction:ltr}
+  .card .src{font-size:12.3px;color:var(--dim)}
+  .card .src a{font-family:var(--mono);font-size:11.5px}
+  .kv{display:grid;grid-template-columns:86px 1fr;gap:4px 10px;font-size:13px;
+      background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+  .kv .k{color:var(--faint);font-size:12px}
+  .kv .v{color:var(--ink)}
+  .kv .v .dir{font-family:var(--mono);font-size:12px}
+  .status{display:inline-block;padding:0 9px;border-radius:14px;font-size:11.5px;font-weight:700}
+  .status.ok{color:var(--green);background:var(--green-dim);border:1px solid rgba(87,230,164,.4)}
+  .status.near{color:var(--blue);background:rgba(143,208,255,.1);border:1px solid rgba(143,208,255,.35)}
+  .status.surprise{color:var(--amber);background:var(--amber-dim);border:1px solid rgba(255,217,127,.4)}
+  .status.half{color:var(--violet);background:rgba(201,166,255,.1);border:1px solid rgba(201,166,255,.35)}
+  .status.miss{color:var(--red);background:rgba(255,143,143,.1);border:1px solid rgba(255,143,143,.35)}
+  .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:4px}
+  .btn{font-family:var(--mono);font-size:11.5px;padding:5px 11px;border-radius:9px;
+       border:1px solid rgba(87,230,164,.35);color:var(--green);background:var(--green-dim)}
+  .btn.ghost{border-color:var(--line);color:var(--dim);background:transparent}
+  .btn.ghost:hover{color:var(--ink)}
+  .btn.kuula{border-color:rgba(255,217,127,.4);color:var(--amber);background:var(--amber-dim)}
+  .btn:hover{text-decoration:none;filter:brightness(1.15)}
+  .xval{font-size:12.3px;color:var(--violet)}
+
+  /* reserves */
+  .reserves{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+  .res{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:11px 14px;font-size:13px}
+  .res b{color:var(--dim)}
+  .res .why{color:var(--faint);font-size:12.5px}
+  .res a{font-family:var(--mono);font-size:11.5px}
+
+  /* method / timeline */
+  .method{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+  .mbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 15px;font-size:13px}
+  .mbox h3{margin:0 0 8px;font-size:14px;color:var(--ink)}
+  .mbox .mono{color:var(--green);font-size:12px}
+  .timeline{margin:8px 0 0;padding:0;list-style:none}
+  .timeline li{display:flex;gap:10px;padding:3px 0;font-size:13px}
+  .timeline .t{font-family:var(--mono);color:var(--green);min-width:96px;direction:ltr;text-align:right}
+
+  /* EQL / data-confidence section (new rules 2026-11-07) */
+  .eqlchips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .eqlchip{padding:3px 12px;border-radius:14px;font-size:12px;font-weight:700;border:1px solid}
+  .eqlchip.rest{color:var(--blue);background:rgba(143,208,255,.1);border-color:rgba(143,208,255,.35)}
+  .eqlchip.motion{color:var(--violet);background:rgba(201,166,255,.1);border-color:rgba(201,166,255,.35)}
+  .eqlchip.env{color:var(--green);background:var(--green-dim);border-color:rgba(87,230,164,.4)}
+  .eqlchip.no{color:var(--red);background:rgba(255,143,143,.1);border-color:rgba(255,143,143,.35)}
+  table.eql{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0 4px}
+  table.eql th{color:var(--dim);font-weight:600;padding:6px 10px;border-bottom:1px solid var(--line);font-size:12px;text-align:right}
+  table.eql td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.eql td.mono{font-size:12px;white-space:nowrap}
+
+  footer{margin-top:44px;border-top:1px solid var(--line);padding-top:18px;color:var(--dim);font-size:12.8px}
+  footer .paths{font-family:var(--mono);font-size:11.5px;direction:ltr;text-align:left;color:var(--faint)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><b>PANODROME</b> · engine-upgrade-v1 · MORADI REAL-CONTENT REVIEW</div>
+  <nav>
+    <a href="./index.html?scene=cabin" title="نسل قبلی موتور — فقط برای مقایسه (دات/شبح‌سازی)">موتور قبلی V1.0 (آرشیو)</a>
+    <a href="./vq11.html?scene=cabin&amp;gen=v11&amp;demo=1">موتور جدید V1.1 — دمو</a>
+    <span class="chip branch">engine-upgrade-v1</span>
+    <span class="chip rnd">R&amp;D ONLY — غیر عمومی</span>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<header class="hero">
+  <h1>بازبینی ست محتوای واقعی «مرادی» — ۱۰ پنورامای یک خانهٔ واحد از کولا</h1>
+  <p class="en">MORADI REAL-CONTENT SET · 10 Kuula posts from ONE apartment · VQ 1.1 method · locked-prediction test · 2026-11-07</p>
+  <div class="meta-chips">
+    <span class="chip">۱۶ پست بررسی‌شده</span>
+    <span class="chip">۱۰ صحنهٔ نهایی</span>
+    <span class="chip">۳ جفت هم‌فضا (اعتبارسنجی متقاطع)</span>
+    <span class="chip">۱۳۲٬۳۴۹ اسپلت در هر صحنه</span>
+    <span class="chip">SPZ ‏۹۶۴–۱۰۹۳KB</span>
+  </div>
+  <p class="lead">
+    این همان ست тестی است که به‌جای «۱۰ صفحهٔ قبلی» ساخته شد تا موتور روی محتوای واقعیِ
+    <b>یک خانهٔ منسجم</b> آزموده شود — چون همهٔ پست‌ها به یک آپارتمان تعلق دارند، حدس‌های فضایی
+    (چه چیزی در کدام جهت خراب می‌شود) با ارجاع متقاطع بین اتاق‌های هم‌پیوند نوشته و
+    <b>قبل از اجرای پایپ‌لاین قفل شدند</b>. هر کارت زیر: منبع، حدس قفل‌شده، اندازه‌گیری، و لینک زندهٔ هارنس.
+  </p>
+
+  <div class="attribution">
+    <span class="t">ذکر منبع — Source attribution:</span>
+    هر ۱۰ پنوراما متعلق به عکاس/ویژوالایزر <b>Mojtaba87</b> در کولاست و فقط برای
+    <b>تست داخلی موتور</b> (R&amp;D) این‌جا نمایش داده می‌شود — نه عرضهٔ عمومی.
+    انتشار عمومی این پنوراماها فقط با اجازهٔ صاحب اثر خواهد بود؛ شاخهٔ main و سایت لایو دست‌نخورده مانده‌اند.
+    <div class="src">
+      profile: <a href="https://kuula.co/profile/Mojtaba87" target="_blank" rel="noopener">https://kuula.co/profile/Mojtaba87</a>
+       · every card below links its original post
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="vcell"><span class="n" dir="ltr">10/10</span><span class="l">قبولی در فاصلهٔ ۰٫۷۵ متر</span></div>
+    <div class="vcell"><span class="n" dir="ltr">≤1.21%</span><span class="l">بیشینهٔ حفره (بدترین ربع)</span></div>
+    <div class="vcell"><span class="n" dir="ltr">11/12</span><span class="l">فراخوانی جهت‌دار خانوادهٔ خطا تأیید</span></div>
+    <div class="vcell"><span class="n" dir="ltr">16.4–23.8</span><span class="l">PSNR میانگین dB در ۰٫۷۵m</span></div>
+    <div class="vcell"><span class="n" dir="ltr">SAFE_R 0.75m</span><span class="l">پاکت اندازه‌گیری‌شده — از این پس پیش‌فرض هارنس</span></div>
+  </div>
+  <div class="verdict-line">
+    <b>حکم نهایی:</b> موتور فعلی روی محتوای واقعیِ یک خانهٔ کامل هم پاس می‌شود —
+    بدون هیچ تیونِ per-scene و با همان پارامترهای قفل‌شدهٔ VQ 1.1.
+    روش بازسازی تصویر عوض نمی‌شود؛ اهرم آینده (گرید عمق پررزولوشن‌تر) تیون است نه تغییر روش.
+  </div>
+</header>
+
+<section id="why">
+  <h2>چرا این ۱۰ پست؟ <span class="en">SELECTION — 16 → 10</span></h2>
+  <p class="sub">
+    از پروفایل کولا، مجموعهٔ ۴-هفته-پیش (۱۶ پست با پسوند moradi) یک آپارتمان منسجم است:
+    سبک یکسانِ کلاسیک-مدرن beige/کرم + طلایی + مرمر + نور مخفی cove. قیف انتخاب:
+  </p>
+  <div class="funnel">
+    <span class="fstep">۱۶ پست مجموعه</span><span class="farrow">→</span>
+    <span class="fstep">−۱ تکرار <b>kit2</b> (md5 یکسان)</span><span class="farrow">→</span>
+    <span class="fstep">−۱ خانهٔ دیگر <b>C7360</b></span><span class="farrow">→</span>
+    <span class="fstep">−۳ ذخیره (kit3a · bed2b · bed3b)</span><span class="farrow">→</span>
+    <span class="fstep"><b>۱۰ صحنهٔ نهایی</b></span>
+  </div>
+  <p class="sub">
+    سه جفتِ هم‌فضا (main3/main4 · kit1/kit2 · bed1a/bed1b) عمداً در ست نگه داشته شدند —
+    همین جفت‌ها بودند که حدس‌ها را «دقیق» کردند: هر حدس دربارهٔ یک فضا از دو نقطهٔ مستقل قابل رد/تأیید است.
+  </p>
+  <div class="zones">
+    <div class="zone"><h3>ورودی / هال <span class="cnt">main2</span></h3>
+      <p>درهای شیشه‌ای دوطرفهٔ قوسی به پتیو · دو آینهٔ بزرگ دیواری دقیقاً روی درز (u0.01/u0.98) · کف براق + درز واقعی nadir</p></div>
+    <div class="zone"><h3>نشیمن نئوکلاسیک <span class="cnt">main1</span></h3>
+      <p>صندلی‌های طلایی + فرش بزرگ · اتصال به فضای دوم/آشپزخانه (u0.17) و راهرو (u0.89) · پنجره‌های سوخته پشت کرکره</p></div>
+    <div class="zone"><h3>پذیرایی باز <span class="cnt">main3 + main4</span></h3>
+      <p>یک فضای بزرگ باز از دو نقطه · بازشدن به آشپزخانه (u0.36) و راهروی ورودی (u0.78) · آینه‌های قاب‌طلایی نزدیک درز در main4</p>
+      <span class="pair">cross-validation pair · Δ=1.62dB (آستانهٔ 1.5 — خطای 0.1dB)</span></div>
+    <div class="zone"><h3>آشپزخانه / ناهارخوری <span class="cnt">kit1 + kit2</span></h3>
+      <p>یک آشربازخانهٔ باز از دو نقطه · راهرو به پذیرایی (u0.83) · میز تکرارشده روی درز (آرتیفکت واقعی آپلود) + پنجرهٔ سوخته</p>
+      <span class="pair">cross-validation pair · Δ=1.49dB ≤ 2 ✓</span></div>
+    <div class="zone"><h3>اتاق خواب مستر <span class="cnt">bed1a + bed1b</span></h3>
+      <p>یک اتاق از دو نقطه · دوربین main-a درست کنار تخت با آینه در مرکز پانو (u0.5) · در حمام/کمد (u0.25) · کاغذدیواری قوسی</p>
+      <span class="pair">cross-validation pair · هم‌پوشانی باندهای PSNR ‏۱۰۰٪ ✓</span></div>
+    <div class="zone"><h3>اتاق خواب کودک <span class="cnt">bed2a</span></h3>
+      <p>دیوار سبز sage + واینسکوت · تخت در foreground پایین کادر · بدون آینه = تمیزترین اتاق خواب</p></div>
+    <div class="zone"><h3>اتاق صورتی <span class="cnt">bed3a</span></h3>
+      <p>کمد منحنی بزرگ نزدیک دوربین + آینهٔ گرد نزدیک درز (u0.11) · درها در هر دو لبه (u0.01/u0.97) — پربهروله‌ترین هندسهٔ ست</p></div>
+  </div>
+</section>
+
+<section id="howto">
+  <h2>چطور موتور جدید را ببینید؟ <span class="en">HOW TO SEE THE NEW ENGINE</span></h2>
+  <div class="verdict-line" style="margin-bottom:22px">
+    روی دکمهٔ سبزِ <b>«🚶 ورود با موتور جدید»</b> هر کارت بزنید: صحنه با پانوی 4K باز می‌شود و
+    بلافاصله یک <b>قدم‌زدن خودکار</b> (۰٫۷۵ متر در ۴ جهت) اجرا می‌شود تا با چشم خودتان ببینید که
+    هنگام حرکت، لایهٔ <b>اسپلت سه‌بعدی</b> با محو نرم جای پانو را می‌گیرد و در سکون، پانوی شارپ برمی‌گردد —
+    این همان موتور جدید V1.1 است (۱۳۲٬۳۴۹ اسپلت در هر صحنه؛ طبق باتری ۱۶۰کپچری در ۰٫۷۵m:
+    لبهٔ دوتایی در هر ۴۰ سلول صحنه-جهت صفر اندازه‌گیری شد، دات هم‌مرتبهٔ مرجع cabin،
+    و VLM سه اتاق پرریسک را جداگانه تأیید کرد).
+    بعد از دمو، کنترل کامل با شماست: کشیدن انگشت = نگاه، دی‌پد/WASD = قدم‌زدن.
+    لینک «موتور قبلی V1.0 (آرشیو)» بالای صفحه فقط برای مقایسه با نسل قبل است.
+  </div>
+</section>
+
+<section id="eql">
+  <h2>قوانین جدید: سطح تجربه و اعتماد داده <span class="en">EQL &amp; DATA CONFIDENCE — 2026-11-07</span></h2>
+  <p class="sub">
+    از امروز هر دادهٔ فضایی این ست یک پوشهٔ اعتماد شش‌فیلدی دارد
+    (<span class="mono" dir="ltr">value · status · source · method · confidence · date</span>)
+    و سطح کیفیت تجربه (EQL) از دل همان پوشه‌ها <b>محاسبه</b> می‌شود — نه اینکه دستی به داده الصاق شود.
+    نردبان وضعیت‌ها: <span class="mono" dir="ltr">unverified &lt; estimated &lt; measured &lt; verified</span>.
+  </p>
+  <div class="eqlchips">
+    <span class="eqlchip rest">استراحت = EQL-0 · چرخش پانوی 4K</span>
+    <span class="eqlchip motion">حرکت = EQL-3-آزمایشی · لایهٔ اسپلت VQ 1.1</span>
+    <span class="eqlchip env">پاکت حرکت = ۰٫۷۵m اندازه‌گیری‌شده</span>
+    <span class="eqlchip no">EQL-2 ناوبری گره‌ای = غیرقابل‌ادعا</span>
+  </div>
+  <table class="eql">
+    <thead><tr><th>داده</th><th>وضعیت</th><th>منبع / روش</th><th>چه چیزی مجاز می‌کند</th></tr></thead>
+    <tbody>
+      <tr><td>پانورامای 4K هر صحنه</td><td class="mono" dir="ltr">verified</td><td>کولا/Mojtaba87 + حذف md5 تکراری</td><td>نمایش استراحت EQL-0</td></tr>
+      <tr><td>هندسهٔ اسپلت</td><td class="mono" dir="ltr">estimated</td><td>عمق تک‌چشمی DAV2 — هیچ اندازه‌گیری صحنه‌ای وجود ندارد</td><td>حرکت آزمایشی درون پاکت؛ نه ابعاد واقعی، نه EQL-4</td></tr>
+      <tr><td>کیفیت حرکت در ۰٫۷۵m</td><td class="mono" dir="ltr">measured</td><td>باتری ۱۶۰کپچری native-DPR + نردبان فاصله + VLM</td><td>ادعای «قابل‌قبول در ۰٫۷۵m»</td></tr>
+      <tr><td>پاکت حرکت ۰٫۷۵m</td><td class="mono" dir="ltr">measured</td><td>نردبان: PRIME 0.2–0.6 · ACCEPTED 0.75 · TRANSIT 1.0–1.3</td><td>پیش‌فرض هارنس (اصلاح امروز: قبلاً 1.3m بود)</td></tr>
+      <tr><td>موقعیت و فاصلهٔ نودها</td><td class="mono" dir="ltr">unverified</td><td>هیچ — کولا موقعیت دوربین را منتشر نمی‌کند</td><td>هیچ؛ تخمین هرگز حق حرکت نمی‌دهد</td></tr>
+    </tbody>
+  </table>
+  <div class="verdict-line" style="margin-top:14px">
+    <b>معنای صادقانه:</b> جفت‌های هم‌فضا (main3/main4 · kit1/kit2 · bed1a/bed1b) ابزار اعتبارسنجی متقاطع‌اند، نه لینک ناوبری —
+    این ست هرگز «قدم‌زدن بین اتاق‌ها» را ادعا نمی‌کند. موتور Zero-Warp (پاکت 0.08m) هم موتوری جدا و مستقل است و
+    به این ست تعلق ندارد؛ موتورها ادغام نمی‌شوند.
+    دادهٔ ماشین‌خوان: <span class="mono" dir="ltr">docs/rd-artifacts/engine-v1/moradi_eql_manifest.json</span>
+  </div>
+</section>
+
+<section id="scenes">
+  <h2>۱۰ صحنه — حدس قفل‌شده در برابر اندازه‌گیری <span class="en">SCENES · GUESSES vs MEASURED @0.75m</span></h2>
+  <p class="sub">
+    هر کارت: <b>حدس</b> = همان‌طور که ساعت 23:27 (قبل از تولید SPZ) قفل شد ·
+    <b>اندازه‌گیری</b> = باتری exp2 با کپچر native-DPR در چهار جهت × سه حالت.
+    لینک‌های هارنس با همان پارامترهای قفل‌شده باز می‌شوند — خودتان تکان بخورید و قضاوت کنید.
+  </p>
+
+  <div class="grid">
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_main1.jpg" alt="moradi_main1" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">نشیمن نئوکلاسیک</span><span class="sid">moradi_main1 · Main_1</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JZk" target="_blank" rel="noopener">kuula.co/post/L8JZk</a> — Mojtaba87</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">pz</span> — پنجره‌های سوختهٔ پشت کرکرهٔ نازک ← نویز disparity در صفحهٔ پنجره</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>16.56</b> · بدترین <b>14.71</b> در <span class="dir">pz</span> <span class="status ok">✓ تأیید</span></span>
+          <span class="k">حفره</span><span class="v">0.17%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_main1&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main1&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main1&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main1&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_main1.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JZk" target="_blank" rel="noopener">کولا</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_main2.jpg" alt="moradi_main2" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">ورودی / هال</span><span class="sid">moradi_main2 · Main_2</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JZc" target="_blank" rel="noopener">kuula.co/post/L8JZc</a> — Mojtaba87</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">px</span> — فروپاشی عمق دو آینهٔ بزرگِ روی درز</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>16.64</b> · بدترین <b>10.73</b> (کمینهٔ کل ست) در <span class="dir">pz</span> <span class="status surprise">غافلگیری</span></span>
+          <span class="k">حفره</span><span class="v">0.06%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_main2&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main2&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main2&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main2&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_main2.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JZc" target="_blank" rel="noopener">کولا</a>
+        </div>
+        <div class="xval">غافلگیری واقعی: درهای شیشه‌ای + پردهٔ سنگین طرح‌دار بدتر از آینه‌ها از آب درآمد — پنوی main2 آرتیفکت درز nadir هم دارد.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_main3.jpg" alt="moradi_main3" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">پذیرایی باز — نقطهٔ A</span><span class="sid">moradi_main3 · Main_3</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JZM" target="_blank" rel="noopener">kuula.co/post/L8JZM</a> — Mojtaba87 · جفت اعتبارسنجی با main4</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">pz</span> (آینه + عمق راهرو) — نامزد PRIME، بهترین ست</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>16.41</b> (پایین‌ترین میانگین) · بدترین <b>15.48</b> در <span class="dir">mx</span> <span class="status miss">خطای جهت</span></span>
+          <span class="k">حفره</span><span class="v">0.37%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_main3&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main3&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main3&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main3&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_main3.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JZM" target="_blank" rel="noopener">کولا</a>
+        </div>
+        <div class="xval">پرجزئیات‌ترین فضا (گچ‌کاری/مرمر/فرش) = پایین‌ترین میانگین: افت از «کف جزئیات» است نه هندسه — در سکونِ پانوی 4K دست‌نخورده می‌ماند.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_main4.jpg" alt="moradi_main4" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">پذیرایی باز — نقطهٔ B</span><span class="sid">moradi_main4 · Main_4</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JZT" target="_blank" rel="noopener">kuula.co/post/L8JZT</a> — Mojtaba87 · همان فضا از نقطهٔ دوم</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">px</span> — دو آینهٔ قاب‌طلاییِ قوسی نزدیک درز (u0.05/u0.96)</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>18.03</b> · بدترین <b>13.71</b> در <span class="dir">px</span> <span class="status ok">✓ تأیید آینه</span></span>
+          <span class="k">حفره</span><span class="v">0.61%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_main4&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main4&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main4&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_main4&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_main4.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JZT" target="_blank" rel="noopener">کولا</a>
+        </div>
+        <div class="xval">جفت با main3: Δ=1.62dB در برابر آستانهٔ 1.5 — خطای 0.1dB؛ هم‌فضا بودن تأیید شد.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_kit1.jpg" alt="moradi_kit1" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">آشپزخانه / ناهارخوری — نقطهٔ A</span><span class="sid">moradi_kit1 · Kitchen_1</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JZ6" target="_blank" rel="noopener">kuula.co/post/L8JZ6</a> — Mojtaba87</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">px</span> — میز ناهارخوریِ روی درزِ دوبارآپلودشده = قوی‌ترین فراخوانی ست (باند 11–15dB + جهش لبهٔ دوبل)</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>19.24</b> · بدترین <b>17.19</b> در <span class="dir">px=pz</span> <span class="status ok">✓ اما بسیار ملایم‌تر از حدس</span></span>
+          <span class="k">حفره</span><span class="v">0.08%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_kit1&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_kit1&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_kit1&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_kit1&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_kit1.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JZ6" target="_blank" rel="noopener">کولا</a>
+        </div>
+        <div class="xval">DAV2 دو کپی میز را تقریباً هم‌عمق ساخت؛ برش 0.75m آنها را جدا نکرد و لبهٔ دوبل صفر بود — واقعیت 17.2dB در برابر باند حدس 11–15.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_kit2.jpg" alt="moradi_kit2" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">آشپزخانه — نقطهٔ B</span><span class="sid">moradi_kit2 · Kitchen_2</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8J1g" target="_blank" rel="noopener">kuula.co/post/L8J1g</a> — Mojtaba87 · همان فضا از نقطهٔ دوم (پست تکراری با md5 یکسان حذف شد)</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">pz</span> — پنجرهٔ سوخته + در شیشه‌ای + بازتاب کف براق</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>20.73</b> · بدترین <b>16.93</b> در <span class="dir">pz</span> <span class="status ok">✓ تأیید</span></span>
+          <span class="k">حفره</span><span class="v">0.30%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_kit2&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_kit2&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_kit2&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_kit2&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_kit2.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8J1g" target="_blank" rel="noopener">کولا</a>
+        </div>
+        <div class="xval">جفت با kit1: Δ=1.49dB ≤ 2 ✓ — پروفایل هم‌فضا تأیید شد.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_bed1a.jpg" alt="moradi_bed1a" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">اتاق خواب مستر — نقطهٔ A</span><span class="sid">moradi_bed1a · Bedroom_1-1</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JDH" target="_blank" rel="noopener">kuula.co/post/L8JDH</a> — Mojtaba87 · دوربین درست کنار تخت</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">mx</span> — آینهٔ گردآرایش دقیقاً در مرکز پانو (u0.5) + تختِ نزدیک = بزرگ‌ترین برش disocclusion ست</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>18.34</b> · بدترین <b>16.66</b> در <span class="dir">pz—mx</span> (فاصله فقط 0.15dB) <span class="status near">✓ نزدیک</span></span>
+          <span class="k">حفره</span><span class="v">0.0%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_bed1a&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed1a&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed1a&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed1a&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_bed1a.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JDH" target="_blank" rel="noopener">کولا</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_bed1b.jpg" alt="moradi_bed1b" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">اتاق خواب مستر — نقطهٔ B</span><span class="sid">moradi_bed1b · Bedroom_1-2</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JHt" target="_blank" rel="noopener">kuula.co/post/L8JHt</a> — Mojtaba87 · همان اتاق از نقطهٔ دوم</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">pz</span> — ربع آینهٔ گردآرایش (u0.67)؛ اگر هر دو نقطهٔ اتاق مستر بخورند، خانوادهٔ خطای آینه دوبار تأیید می‌شود</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>23.84</b> (بهترین ست) · بدترین <b>16.48</b> در <span class="dir">pz</span> <span class="status ok">✓ تأیید ربع آینه</span></span>
+          <span class="k">حفره</span><span class="v">0.0%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_bed1b&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed1b&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed1b&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed1b&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_bed1b.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JHt" target="_blank" rel="noopener">کولا</a>
+        </div>
+        <div class="xval">همان ربع آینه‌ای که در bed1a ضعیف‌ترین بود اینجا هم ضعیف‌ترین است — ریشهٔ مشکل دوبار تأیید شد؛ بعضی جهات این اتاق تقریباً بی‌نقص‌اند (تا 37.3dB با لبهٔ دوبل صفر).</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_bed2a.jpg" alt="moradi_bed2a" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">اتاق خواب کودک</span><span class="sid">moradi_bed2a · Bedroom_2-1</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JMW" target="_blank" rel="noopener">kuula.co/post/L8JMW</a> — Mojtaba87</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهت <span class="dir">mz</span> — تخت در foreground پایین کادر (برش نزدیک‌میدان) · بدون آینه = تمیزترین اتاق، نامزد PRIME</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>20.54</b> · بدترین <b>17.95</b> در <span class="dir">mz</span> <span class="status ok">✓ تأیید</span></span>
+          <span class="k">حفره</span><span class="v">0.0%</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_bed2a&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed2a&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed2a&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed2a&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_bed2a.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JMW" target="_blank" rel="noopener">کولا</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="assets/moradi_thumbs/moradi_bed3a.jpg" alt="moradi_bed3a" loading="lazy">
+      <div class="body">
+        <div class="head"><span class="room">اتاق صورتی</span><span class="sid">moradi_bed3a · Bedroom_3-1</span></div>
+        <div class="src">منبع: <a href="https://kuula.co/post/L8JTX" target="_blank" rel="noopener">kuula.co/post/L8JTX</a> — Mojtaba87</div>
+        <div class="kv">
+          <span class="k">حدس قفل</span><span class="v">بدترین جهتِ خانوادهٔ <span class="dir">pz</span> — کمد منحنیِ نزدیک (1.5m) = خانوادهٔ خطای جدیدِ «سیلوئت منحنی» که در cabin نبود + آینهٔ گرد نزدیک درز به‌عنوان ریسک ثانویه px</span>
+          <span class="k">اندازه‌گیری</span><span class="v">میانگین <b>21.79</b> · بدترین <b>14.26</b> در <span class="dir">px</span> · حفره <b>1.21%</b> (بیشینهٔ ست، از کمد منحنی) <span class="status half">نیمه‌تأیید</span></span>
+          <span class="k">حفره</span><span class="v">1.21% — فقط ربع کمد/آینه</span>
+          <span class="k">EQL</span><span class="v">استراحت <b>EQL-0</b> · حرکت <b>EQL-3-آزمایشی</b> · پاکت <b>۰٫۷۵m</b> اندازه‌گیری‌شده</span>
+        </div>
+        <div class="links">
+          <a class="btn" href="./vq11.html?scene=moradi_bed3a&amp;gen=v11&amp;mode=both&amp;demo=1">🚶 ورود با موتور جدید — دموی خودکار</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed3a&amp;gen=v11&amp;mode=both">هر دو (بدون دمو)</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed3a&amp;gen=v11&amp;mode=splat">اسپلت</a>
+          <a class="btn ghost" href="./vq11.html?scene=moradi_bed3a&amp;gen=v11&amp;mode=pano">پانو</a>
+          <a class="btn ghost" href="../../assets/panoramas/moradi_bed3a.jpg">پانوی 4K</a>
+          <a class="btn kuula" href="https://kuula.co/post/L8JTX" target="_blank" rel="noopener">کولا</a>
+        </div>
+        <div class="xval">حفره‌ها دقیقاً از ربع کمد منحنی آمدند (حدس pz-family ✓) اما کمینهٔ PSNR از px بود — پربهروله‌ترین صحنه، با این حال قابل‌عبور.</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="reserves">
+  <h2>ذخیره‌ها و حذف‌شده‌ها <span class="en">RESERVES &amp; EXCLUDED — شفافیت کامل</span></h2>
+  <div class="reserves">
+    <div class="res"><b>kit3a — Kitchen_3</b> · <a href="https://kuula.co/post/L8J1y" target="_blank" rel="noopener">kuula.co/post/L8J1y</a>
+      <div class="why">ذخیره: آشپزخانهٔ خدمت با درهای شیشه‌ای خارجی در هر دو لبهٔ درز (u0/u1) — حالت حدی برای آزمون‌های بعدی</div></div>
+    <div class="res"><b>bed2b — Bedroom_2-2</b> · <a href="https://kuula.co/post/L8JTl" target="_blank" rel="noopener">kuula.co/post/L8JTl</a>
+      <div class="why">ذخیره: نمای دوم اتاق کودک (مطالعه/کمد/خواب)</div></div>
+    <div class="res"><b>bed3b — Bedroom_3-2</b> · <a href="https://kuula.co/post/L8JTd" target="_blank" rel="noopener">kuula.co/post/L8JTd</a>
+      <div class="why">ذخیره: نمای دوم اتاق صورتی (در قوسی به بیرون)</div></div>
+    <div class="res"><b>C7360 — حذف‌شده</b> · <a href="https://kuula.co/post/LxFdY" target="_blank" rel="noopener">kuula.co/post/LxFdY</a>
+      <div class="why">خانهٔ دیگری است: نشانگرهای سبک متفاوت، بستهٔ آپلود جدا، ماشین لباسشویی داخل کابینت — طبق قانون مالک: «از یک خونه»</div></div>
+    <div class="res"><b>تکرار Kitchen_2 — حذف‌شده</b>
+      <div class="why">همان پست دو بار آپلود شده بود؛ md5 یکسان → یک منبع یکتا شمرده شد</div></div>
+  </div>
+</section>
+
+<section id="method">
+  <h2>قفل روش — چطور این ست اجرا شد <span class="en">METHOD LOCK</span></h2>
+  <div class="method">
+    <div class="mbox">
+      <h3>پارامترهای قفل‌شده (بدون تیون per-scene)</h3>
+      <span class="mono">σ = 1.3×footprint · opacity 1.0 · stride 2 · grid 1022×518 · CAM_H 1.5m · DAV2-small ONNX · SPZ v4</span>
+      <p style="margin:8px 0 0">ده SPZ بین 964 تا 1093KB — همان کلاس حجمی cabin (1090KB) و همان بودجهٔ موبایل VQ 1.1؛ هر صحنه 132,349 اسپلت.</p>
+    </div>
+    <div class="mbox">
+      <h3>ترتیب کار (قابل بازبینی با timestamp فایل‌ها)</h3>
+      <ul class="timeline">
+        <li><span class="t">23:23</span><span>VLM-survey از ۱۶ پستِ پروفایل — ساختار هر اتاق، پنجره‌ها/آینه‌ها/درها با موقعیت u</span></li>
+        <li><span class="t">23:27</span><span><b>حدس‌ها قفل شدند</b> (moradi_predictions.json) — باندهای کمی PSNR در ۴ جهت، باند حفره/bleed/dot، بدترین جهت، پرچم‌های ۵ خانوادهٔ خطا</span></li>
+        <li><span class="t">23:30</span><span>تولید SPZ هر ۱۰ صحنه با پارامترهای قفل</span></li>
+        <li><span class="t">23:44–03:18</span><span>اندازه‌گیری settle-aware: ۱۶۰ کپچر native-DPR — هیچ حدسی بعد از دیدن نتیجه بازنویسی نشد</span></li>
+      </ul>
+    </div>
+    <div class="mbox">
+      <h3>کارنامهٔ حدس‌ها (صادقانه)</h3>
+      <p style="margin:0">
+        امتیاز کلی: <b>40 HIT / 12 NEAR / 41 MISS</b> (۴۳٪ سخت‌گیرانه، ۵۶٪ با NEAR؛ n=93).
+        جهت‌ها و خانواده‌ها درست از آب درآمدند (۱۱/۱۲)؛ باندهای PSNR روی آینه/درز بیش‌ازحد بدبینانه بودند —
+        موتور واقعی بهتر از ترس‌ها بود. پراکندگی محتوای واقعی ۳ برابر cabin است، پس هر صحنهٔ واقعی اندازه‌گیری خودش را می‌خواهد.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p style="margin:0 0 8px">
+    <b>ذکر منبع:</b> هر ۱۰ پنورامای این ست متعلق به
+    <a href="https://kuula.co/profile/Mojtaba87" target="_blank" rel="noopener">Mojtaba87 در کولا</a>ست
+    و صرفاً به‌عنوان بنچمارک R&amp;D موتور Panodrome استفاده شده — عرضهٔ عمومی نیازمند اجازهٔ صاحب اثر است.
+    این ست جایگزین «۱۰ صفحهٔ قبلی» تست موتور شد؛ اتاق‌های ده‌گانهٔ سایت اصلی و شاخهٔ main دست‌نخورده باقی مانده‌اند.
+  </p>
+  <p class="paths">
+    report: docs/engine-upgrade-v1/moradi_realcontent_v1.md · raw: docs/rd-artifacts/engine-v1/moradi_*.json
+    · eql/confidence: docs/rd-artifacts/engine-v1/moradi_eql_manifest.json
+    · owner package: download/panodrome-moradi/ (MORADI_results.xlsx · stills/160 · heroes/H1-H5 · videos/2)
+    · harness: labs/engine-v1/vq11.html?scene=moradi_*&amp;gen=v11
+  </p>
+</footer>
+
+</div>
+</body>
+</html>

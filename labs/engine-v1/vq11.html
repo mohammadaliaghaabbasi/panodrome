@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Panodrome VQ 1.1 — Visual Quality Lab (modes / distances / mobile perf)</title>
+<!--
+  PANODROME VISUAL QUALITY V1.1 — test harness (branch engine-upgrade-v1)
+  Purpose: attribute dots / blur / ghosting to a LAYER, benchmark movement
+  distances, and measure mobile load/perf. The original lab (index.html+app.js)
+  is NOT modified — this is a separate page reusing the same vendored runtime
+  (three 0.180.0 + Spark 2.4.0, same importmap) and the same SPZ assets.
+  Query params:
+    scene=cabin (default)     splat asset scene
+    gen=v1|v11                splat generation (v1 = shipped 0.7-scale, v11 = tuned)
+    mode=pano|splat|both      INDEPENDENT layer modes (default both)
+    bg=magenta|black          splat-mode background (magenta = hole measurement)
+    offset=<m>&dir=+x|-x|+z|-z  spawn camera at test offset
+    look=back|fwd|perp        initial look relative to travel dir (default back)
+    blend=auto|0|1            splat blend in both-mode (auto = walk zone logic)
+    fade=<ms>                 crossfade time constant (default 350)
+    safeR=<m>                 movement clamp radius (default 0.75 = measured accepted envelope; pass 1.3 for the full R&D ladder)
+    ui=0                      hide HUD/dpad/badge (clean captures)
+    autotest=1                run in-page iPhone battery -> copyable JSON report
+-->
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#000;font-family:ui-monospace,Menlo,Consolas,monospace;color:#dfe}
+  canvas{display:block;touch-action:none}
+  #hud{position:fixed;top:8px;left:8px;padding:8px 10px;background:rgba(0,20,10,.72);border:1px solid rgba(80,255,180,.25);
+       border-radius:8px;font-size:11px;line-height:1.5;white-space:pre;z-index:5;pointer-events:none;max-width:52vw}
+  #dpad{position:fixed;right:14px;bottom:16px;z-index:6;display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);gap:4px}
+  #dpad button{background:rgba(0,25,15,.75);border:1px solid rgba(80,255,180,.4);color:#cfe;border-radius:10px;font-size:17px;touch-action:none}
+  #dpad button:active{background:rgba(60,255,170,.35)}
+  #badge{position:fixed;bottom:12px;left:10px;z-index:5;font-size:10px;color:rgba(160,255,210,.65);pointer-events:none}
+  #err{position:fixed;top:8px;right:8px;max-width:44vw;padding:6px 9px;background:rgba(60,0,0,.85);border:1px solid rgba(255,80,80,.5);
+       border-radius:8px;font-size:10px;display:none;white-space:pre-wrap;z-index:9}
+  #modes{position:fixed;top:8px;right:8px;z-index:7;display:flex;gap:6px}
+  #modes button{background:rgba(0,25,15,.85);border:1px solid rgba(80,255,180,.5);color:#cfe;border-radius:8px;
+       font-size:11px;padding:6px 9px;font-family:inherit}
+  #modes button.on{background:rgba(60,255,170,.4)}
+  /* mobile: the 4-button row (pano/splat/both/walk ≈ 311px) overlaps the HUD on
+     narrow viewports — wrap the buttons into rows top-right, and wrap the HUD
+     text (pre-wrap, 40vw) so it stays inside its box instead of spilling under
+     the buttons (measured 2026-11-07 on a 390px phone: hud right 178px,
+     modes left 210px — 32px clear; desktop unchanged) */
+  @media (max-width:560px){
+    #modes{flex-wrap:wrap;justify-content:flex-end;max-width:44vw;row-gap:4px}
+    #hud{white-space:pre-wrap;max-width:40vw}
+  }
+  #report{position:fixed;inset:8% 6%;z-index:20;display:none;flex-direction:column;background:rgba(0,18,10,.96);
+       border:1px solid rgba(80,255,180,.5);border-radius:12px;padding:14px;font-size:12px}
+  #report textarea{flex:1;margin-top:10px;background:#02140c;color:#bfe;color:inherit;border:1px solid rgba(80,255,180,.3);
+       border-radius:8px;font-family:inherit;font-size:11px;padding:8px}
+  #report .row{display:flex;gap:8px;margin-top:10px;justify-content:flex-end}
+  #report .row button{background:rgba(60,255,170,.3);border:1px solid rgba(80,255,180,.6);color:#eff;border-radius:8px;
+       padding:8px 14px;font-family:inherit;font-size:12px}
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "./vendor/three-0.180.0.module.min.js",
+    "three/addons/": "./vendor/three-addons/",
+    "@sparkjsdev/spark": "./vendor/spark-2.4.0/spark.module.min.js"
+} }
+</script>
+</head>
+<body>
+<div id="hud">booting…</div>
+<div id="err"></div>
+<div id="modes">
+  <button data-mode="pano">Pano</button>
+  <button data-mode="splat">Splat</button>
+  <button data-mode="both" class="on">Pano+Splat</button>
+  <button id="walkbtn" title="auto-walk diamond path 0-0.75-0 m (4 dirs) — movement-in-space demo">🚶 Walk 0.75m</button>
+</div>
+<div id="dpad">
+  <span></span><button data-mv="fwd">▲</button><span></span>
+  <button data-mv="left">◀</button><button data-mv="back">▼</button><button data-mv="right">▶</button>
+</div>
+<div id="badge">Panodrome VQ 1.1 harness — موتور جدید · modes P/S/C · gen switch ·
+  <a style="color:#c9a6ff" href="./moradi.html">MORADI review (10 real Kuula scenes)</a> ·
+  <a style="color:#9fe8c8" href="./index.html?scene=cabin">موتور قبلی V1.0 (آرشیو مقایسه)</a></div>
+<div id="report"><div id="rep-txt">report</div><textarea id="rep-json" readonly></textarea>
+  <div class="row"><button id="rep-copy">Copy JSON</button><button id="rep-close">Close</button></div></div>
+<script type="module" src="./vq11.js"></script>
+</body>
+</html>
