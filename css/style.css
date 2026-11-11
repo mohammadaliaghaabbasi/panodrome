@@ -1,0 +1,649 @@
+/* ============================================================
+   PANODROME — Stage 1.5 · Luxury "Invisible UI" + True Walking
+   92% of the viewport stays pure, unobstructed architecture.
+   Typography: Vazirmatn (fa) + Inter (en) — never Tahoma/Arial.
+   Zero-overflow guarantee on every viewport ≥ 320px, LTR & RTL.
+   ============================================================ */
+
+:root {
+  --glass-bg: rgba(10, 14, 20, 0.42);
+  --glass-bg-strong: rgba(10, 14, 20, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --ink: #eef2f8;
+  --ink-dim: rgba(238, 242, 248, 0.62);
+  --ink-faint: rgba(238, 242, 248, 0.42);
+  --accent: rgba(190, 225, 255, 0.85);
+  --pill-max: 260px;
+  --btn-size: 38px;
+  --edge: max(14px, env(safe-area-inset-left, 0px));
+  --bottom-stack: max(16px, calc(env(safe-area-inset-bottom, 0px) + 12px));
+}
+
+/* ---------- base: locked, unscrollable, gesture-owned canvas ---------- */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: #070a10;
+  color: var(--ink);
+  font-family: 'Vazirmatn', 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#app { position: fixed; inset: 0; }
+#scene, #scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.hud-hidden { display: none !important; }
+
+/* ---------- glass ---------- */
+
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================================
+   TOP-INLINE-START — room pill (title · designer · source)
+   ============================================================ */
+
+#room-pill {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top, 0px));
+  inset-inline-start: var(--edge);
+  max-width: min(var(--pill-max), calc(100vw - 32px - 3 * var(--btn-size) - 20px - 20px));
+  padding: 10px 16px 11px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+#room-title {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+#room-badge {
+  display: none;
+  margin-top: 2px;
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.pill-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+  font-size: 11.5px;
+  font-weight: 300;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+}
+
+#room-designer {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.source-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 2.5px 8px;
+  border: 1px solid rgba(190, 225, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(190, 225, 255, 0.07);
+  transition: background 0.2s;
+}
+.source-badge:hover { background: rgba(190, 225, 255, 0.16); }
+
+/* ============================================================
+   TOP-INLINE-END — three 38px circular glass buttons
+   ============================================================ */
+
+#view-actions {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top, 0px));
+  inset-inline-end: var(--edge);
+  display: flex;
+  gap: 10px;
+}
+
+.round-btn {
+  width: var(--btn-size);
+  height: var(--btn-size);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  transition: transform 0.18s ease, background 0.2s ease;
+}
+.round-btn:hover { transform: translateY(-1px); background: var(--glass-bg-strong); }
+.round-btn:active { transform: scale(0.94); }
+
+#btn-lang { font-weight: 500; letter-spacing: 0.2px; }
+#btn-sound { color: var(--ink-dim); }
+#btn-sound.on { color: var(--ink); }
+
+/* ============================================================
+   BOTTOM-CENTRE — routing-mode bar + navigation capsule (stack)
+   ============================================================ */
+
+#mode-bar {
+  position: absolute;
+  bottom: calc(var(--bottom-stack) + 64px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 6px;
+  border-radius: 999px;
+  max-width: calc(100vw - 20px);
+}
+
+.mode-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6.5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.mode-chip svg { flex-shrink: 0; opacity: 0.75; }
+.mode-chip:hover { background: rgba(255, 255, 255, 0.08); color: var(--ink); }
+.mode-chip.active {
+  background: rgba(190, 225, 255, 0.14);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(190, 225, 255, 0.32);
+}
+.mode-chip.active svg { opacity: 1; }
+
+#nav-capsule {
+  position: absolute;
+  bottom: var(--bottom-stack);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 20px);
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px;
+  border-radius: 999px;
+}
+
+.nav-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--ink-dim);
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+.nav-btn:hover { background: rgba(255, 255, 255, 0.09); color: var(--ink); }
+.nav-btn:active { transform: scale(0.92); }
+
+.nav-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 0 6px;
+}
+
+.nav-roomline {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  max-width: 46vw;
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+#nav-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+#nav-count {
+  font-size: 11.5px;
+  font-weight: 300;
+  color: var(--ink-dim);
+  flex-shrink: 0;
+}
+
+#nav-hint {
+  margin-top: 2px;
+  font-size: 10.5px;
+  font-weight: 300;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 46vw;
+}
+
+/* ============================================================
+   COLLISION TOAST + RIPPLE
+   ============================================================ */
+
+#bump-toast {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--bottom-stack) + 118px);
+  transform: translateX(-50%);
+  padding: 7px 15px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink);
+  white-space: nowrap;
+  max-width: calc(100vw - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+  z-index: 6;
+}
+#bump-toast.show { opacity: 1; transform: translateX(-50%) translateY(-3px); }
+
+#ripple-host { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+
+.bump-ripple {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  border: 1.6px solid rgba(210, 230, 255, 0.85);
+  box-shadow: 0 0 18px rgba(190, 225, 255, 0.35);
+  animation: ripple 0.62s ease-out forwards;
+}
+@keyframes ripple {
+  from { transform: scale(0.7); opacity: 0.95; }
+  to   { transform: scale(8.2); opacity: 0; }
+}
+
+/* ============================================================
+   TOUCH — analog walk joystick
+   ============================================================ */
+
+#joystick {
+  position: absolute;
+  inset-inline-end: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(var(--bottom-stack) + 132px);
+  display: none;
+}
+body.touch #joystick { display: block; }
+@media (pointer: coarse) { #joystick { display: block; } }
+
+#joy-base {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  position: relative;
+  touch-action: none;
+}
+#joy-base::after {
+  content: "";
+  position: absolute;
+  inset: 26px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+}
+#joy-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 50%;
+  background: rgba(238, 242, 248, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 0.08s linear;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+#joystick.live #joy-knob { transition: none; background: rgba(190, 225, 255, 0.28); }
+
+/* ============================================================
+   WAYPOINT CHIP
+   ============================================================ */
+
+#wp-chip {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  transform: translate(-50%, -50%);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--ink);
+  white-space: nowrap;
+  max-width: calc(100vw - 32px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.2s;
+  z-index: 5;
+}
+#wp-chip:hover { background: var(--glass-bg-strong); }
+
+/* ============================================================
+   OVERLAYS — loading / fade / intro
+   ============================================================ */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+#loading { background: rgba(7, 10, 16, 0.88); backdrop-filter: blur(10px); }
+
+.load-word {
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 8px;
+  color: var(--ink-dim);
+  margin-bottom: 22px;
+}
+
+.load-bar {
+  width: min(210px, 60vw);
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+#load-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(238, 242, 248, 0.55), #eef2f8);
+  transition: width 0.35s ease;
+}
+
+#load-text {
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--ink-faint);
+}
+
+#fade {
+  position: absolute;
+  inset: 0;
+  background: #05070b;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* ---------- intro ---------- */
+
+#intro {
+  background: #070a10;
+  overflow: hidden;
+  transition: opacity 0.7s ease, visibility 0.7s;
+}
+#intro.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.intro-bg {
+  position: absolute;
+  inset: -40px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(26px) brightness(0.4) saturate(1.15);
+  transform: scale(1.06);
+}
+
+.intro-veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(7, 10, 16, 0.15) 0%, rgba(7, 10, 16, 0.82) 100%);
+}
+
+.intro-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+  max-width: min(560px, calc(100vw - 32px));
+}
+
+.wordmark {
+  font-family: 'Vazirmatn', 'Inter', sans-serif;
+  font-size: clamp(34px, 7vw, 56px);
+  font-weight: 700;
+  letter-spacing: 4px;
+  line-height: 1.1;
+}
+.wordmark span {
+  font-weight: 300;
+  color: var(--ink-dim);
+}
+
+.tagline {
+  margin-top: 18px;
+  font-size: clamp(13px, 2.6vw, 15.5px);
+  font-weight: 400;
+  color: var(--ink);
+  max-width: 42ch;
+}
+
+.intro-sub {
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 300;
+  color: var(--ink-faint);
+  letter-spacing: 0.4px;
+}
+
+#btn-enter {
+  margin-top: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 30px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0a0e14;
+  background: #eef2f8;
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+  box-shadow: 0 10px 40px rgba(238, 242, 248, 0.18);
+}
+#btn-enter:hover { transform: translateY(-2px); box-shadow: 0 14px 48px rgba(238, 242, 248, 0.28); }
+#btn-enter:active { transform: scale(0.97); }
+
+.intro-hint {
+  margin-top: 22px;
+  font-size: 11.5px;
+  font-weight: 300;
+  color: var(--ink-faint);
+}
+
+.intro-credit {
+  position: absolute;
+  bottom: max(18px, env(safe-area-inset-bottom, 0px));
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 300;
+  color: rgba(238, 242, 248, 0.3);
+}
+
+#webgl-error {
+  background: #070a10;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--ink-dim);
+}
+
+/* ============================================================
+   RTL — Persian specifics
+   ============================================================ */
+
+html[dir="rtl"] #nav-prev svg { transform: scaleX(-1); }
+html[dir="rtl"] #nav-next svg { transform: scaleX(-1); }
+html[dir="rtl"] .wordmark { letter-spacing: 1px; }
+body.fa .nav-roomline, body.fa #room-title, body.fa #wp-chip, body.fa .mode-chip { letter-spacing: 0; }
+
+/* ============================================================
+   MOBILE — 390×844 and below
+   ============================================================ */
+
+@media (max-width: 768px) {
+  :root { --pill-max: 200px; --btn-size: 38px; --bottom-stack: max(12px, calc(env(safe-area-inset-bottom, 0px) + 10px)); }
+
+  #room-pill { padding: 9px 13px 10px; border-radius: 14px; }
+  #room-title { font-size: 13.5px; }
+  .pill-meta { font-size: 10.5px; gap: 6px; }
+  #room-badge { font-size: 8.5px; }
+  .source-badge { font-size: 9px; padding: 2px 7px; }
+
+  #mode-bar { bottom: calc(var(--bottom-stack) + 60px); padding: 4px 5px; gap: 2px; }
+  .mode-chip { padding: 6px 9.5px; font-size: 11.5px; gap: 5px; }
+  .mode-chip svg { display: none; }             /* keep chips compact + inside bounds */
+
+  #nav-capsule { padding: 6px 8px; gap: 2px; }
+  .nav-roomline { font-size: 12.5px; max-width: 52vw; gap: 6px; }
+  #nav-count { font-size: 10.5px; }
+  #nav-hint { font-size: 9.5px; max-width: 52vw; }
+  .nav-btn { width: 32px; height: 32px; }
+
+  #joystick { bottom: calc(var(--bottom-stack) + 128px); }
+  #joy-base { width: 88px; height: 88px; }
+  #joy-knob { width: 40px; height: 40px; margin: -20px 0 0 -20px; }
+
+  #bump-toast { bottom: calc(var(--bottom-stack) + 112px); font-size: 11px; }
+
+  .tagline { max-width: 34ch; }
+  #btn-enter { padding: 12px 26px; font-size: 13.5px; margin-top: 28px; }
+}
+
+@media (max-width: 360px) {
+  :root { --pill-max: 168px; }
+  #nav-hint { display: none; }   /* keep the capsule strictly inside the viewport */
+  .mode-chip { padding: 6px 8px; font-size: 11px; }
+}
+
+/* ============================================================
+   LIVE 2D FLOORPLAN RADAR (stage 2.1 port — kept by the
+   2026-11-04 cartoon purge; walls, doorway, furniture, camera)
+   ============================================================ */
+
+#btn-radar.on {
+  background: var(--glass-bg-strong);
+  box-shadow: inset 0 0 0 1px rgba(214, 234, 255, 0.55);
+}
+
+#radar-wrap {
+  position: absolute;
+  inset-inline-start: max(14px, env(safe-area-inset-left, 0px));
+  bottom: calc(var(--bottom-stack) + 14px);
+  padding: 8px;
+  border-radius: 16px;
+  z-index: 4;
+  pointer-events: none;
+  transition: transform 0.35s ease;
+}
+#radar-wrap.collapsed { display: none; }
+#radar { display: block; border-radius: 10px; }
+#radar-label {
+  font-size: 10px;
+  color: var(--ink-dim);
+  text-align: center;
+  margin-top: 5px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#radar-wrap.plan { padding: 12px; }
+body.touch #radar-wrap, body.fa #radar-wrap { bottom: calc(var(--bottom-stack) + 140px); }
+
+/* QA: pristine photo frames for identity gates (E2E sets this class) */
+body.qa-hidden #room-pill, body.qa-hidden #view-actions, body.qa-hidden #mode-bar,
+body.qa-hidden #nav-capsule, body.qa-hidden #bump-toast, body.qa-hidden #radar-wrap,
+body.qa-hidden #wp-chip, body.qa-hidden #joystick,
+body.qa-hidden #ripple-host, body.qa-hidden #qa-labs {
+  display: none !important;
+}
+
+/* ============================================================
+   OWNER INTERNAL-QA BADGE (2026-11-07) — R&D only, not public UX
+   Links the live site to labs/engine-v1/moradi.html — the 10-scene
+   real-content engine review (Kuula/Mojtaba87, source-attributed).
+   Invisible-luxury: tiny + dim, brightens on hover.
+   ============================================================ */
+#qa-labs{
+  position:fixed; inset-inline-start:14px; bottom:calc(env(safe-area-inset-bottom, 0px) + 12px);
+  z-index:6; display:inline-block; padding:8px 13px; border-radius:999px;
+  font-size:11px; letter-spacing:.02em; text-decoration:none; color:var(--ink-dim);
+  opacity:.8; transition:opacity .25s ease, color .25s ease;
+}
+#qa-labs:hover{ opacity:1; color:var(--ink); }
+@media (pointer: coarse){ #qa-labs{ opacity:.85; } }

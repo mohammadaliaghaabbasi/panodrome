@@ -1,0 +1,1561 @@
+{
+ "schema": "panodrome/rooms-db@2",
+ "project": "Panodrome",
+ "generated_at": "2026-11-03T00:00:00",
+ "stage": "stage2_zero_warp_true3d",
+ "content_source": "Built-in TRUE-3D villa .glb (1, skills/build_true_3d_room.py — real 3D PBR geometry) + PolyHaven CC0 (9) + Wikimedia Commons CC BY-SA 4.0 (1) — 10 curated 4K equirect panoramas rendered on a PURE SphereGeometry(500,128,96) with ZERO vertex displacement",
+ "geometry_law": "ZERO-WARP LAW (owner 2026-11-03): pano rooms = the original 4K equirect photograph on a geometrically pure THREE.SphereGeometry(500, 128, 96) centred at the capture point — NO depth map, NO relief field, NO vertex displacement, EVER; the camera lives in a 0.08 m micro-parallax sphere around the capture origin while a VIRTUAL position travels the real collision world with Matterport-style optical step-glide (FOV 72<->52). true_3d rooms = real 3D .glb architecture with full multi-metre 6DoF walking and exact Box3 furniture collision (camera.fov locked 72).",
+ "rooms": [
+  {
+   "id": "modern_3d_villa",
+   "room_type": "living_room",
+   "style_tags": [
+    "modern",
+    "minimal",
+    "bright"
+   ],
+   "type": "true_3d",
+   "badge": {
+    "en": "🧊 True 3D space (LiDAR / 3D Mesh)",
+    "fa": "🧊 فضای سه‌بعدی واقعی (LiDAR / 3D Mesh)"
+   },
+   "name": {
+    "en": "Modern 3D Villa",
+    "fa": "ویلای مدرن سه‌بعدی"
+   },
+   "description": {
+    "en": "A real 3D modern villa living room — true geometry, PBR oak, plaster and travertine, full 6DoF walking with exact furniture collision.",
+    "fa": "نشیمن واقعیِ یک ویلای مدرن — هندسهٔ سه‌بعدی حقیقی با متریال چوب، گچ و تراورتن؛ قدم‌زدن کامل شش‌درجه‌آزادی با برخورد دقیق با مبلمان."
+   },
+   "glb": "assets/true3d/modern_3d_villa.glb",
+   "preview": "assets/preview/modern_3d_villa.jpg",
+   "room_shape": {
+    "width": 6.4,
+    "height": 3.0,
+    "depth": 5.2
+   },
+   "camera": {
+    "x": 0.9,
+    "y": 1.65,
+    "z": 1.9
+   },
+   "initial_view": {
+    "facing": 0.85
+   },
+   "portals": [
+    {
+     "id": "villa_exit_door",
+     "origin": "authored_doorway",
+     "position": [
+      1.8,
+      1.35,
+      -2.2800000000000002
+     ]
+    }
+   ],
+   "floor_material": "wood",
+   "audio": {
+    "ambient": "room_tone",
+    "reverb": 0.32,
+    "footsteps": "wood"
+   },
+   "attribution": {
+    "creator": "Panodrome Studio",
+    "source": "Built-in True-3D",
+    "license": "CC0",
+    "url": "https://mohammadaliaghaabbasi.github.io/panodrome/"
+   },
+   "source_platform": "built_in",
+   "style_family": "modern",
+   "type_group": "residential",
+   "sky": {
+    "zenith": "#7db3e8",
+    "horizon": "#eef2f4",
+    "sun": "#fff3dd",
+    "sun_dir": [
+     -0.62,
+     0.55,
+     0.22
+    ]
+   },
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -2.75,
+     "maxX": 2.75,
+     "minZ": -2.15,
+     "maxZ": 2.15
+    },
+    "obstacles": [
+     {
+      "type": "box",
+      "x": -0.6,
+      "z": 0.6,
+      "hw": 0.5,
+      "hd": 1.32,
+      "h": 0.92,
+      "rot": 0.0,
+      "source": "authored",
+      "label": {
+       "en": "Sofa",
+       "fa": "مبل"
+      }
+     },
+     {
+      "type": "box",
+      "x": 0.75,
+      "z": 0.6,
+      "hw": 0.62,
+      "hd": 0.32,
+      "h": 0.4,
+      "rot": 0.0,
+      "source": "authored",
+      "label": {
+       "en": "Coffee Table",
+       "fa": "میز عسلی"
+      }
+     },
+     {
+      "type": "box",
+      "x": 2.96,
+      "z": -0.9,
+      "hw": 0.26,
+      "hd": 0.95,
+      "h": 0.72,
+      "rot": 0.0,
+      "source": "authored",
+      "label": {
+       "en": "Sideboard",
+       "fa": "بوفه"
+      }
+     },
+     {
+      "type": "cylinder",
+      "x": 0.95,
+      "z": -1.3,
+      "r": 0.21,
+      "h": 1.63,
+      "rot": 0.0,
+      "source": "authored",
+      "label": {
+       "en": "Floor Lamp",
+       "fa": "چراغ ایستاده"
+      }
+     },
+     {
+      "type": "box",
+      "x": -2.35,
+      "z": -1.7,
+      "hw": 0.26,
+      "hd": 0.26,
+      "h": 1.28,
+      "rot": 0.0,
+      "source": "authored",
+      "label": {
+       "en": "Sculpture Plinth",
+       "fa": "پایهٔ مجسمه"
+      }
+     }
+    ],
+    "lights": [
+     {
+      "type": "sun",
+      "pos": [
+       -14,
+       18,
+       5
+      ],
+      "intensity": 2.6,
+      "color": "#fff1de"
+     },
+     {
+      "type": "spot",
+      "pos": [
+       1.5,
+       2.72,
+       1.2
+      ],
+      "intensity": 0.5,
+      "color": "#ffe7c6",
+      "distance": 8
+     },
+     {
+      "type": "spot",
+      "pos": [
+       -1.5,
+       2.72,
+       1.2
+      ],
+      "intensity": 0.5,
+      "color": "#ffe7c6",
+      "distance": 8
+     },
+     {
+      "type": "spot",
+      "pos": [
+       1.5,
+       2.72,
+       -1.2
+      ],
+      "intensity": 0.5,
+      "color": "#ffe7c6",
+      "distance": 8
+     },
+     {
+      "type": "spot",
+      "pos": [
+       -1.5,
+       2.72,
+       -1.2
+      ],
+      "intensity": 0.5,
+      "color": "#ffe7c6",
+      "distance": 8
+     }
+    ]
+   }
+  },
+  {
+   "id": "anniversary_lounge",
+   "room_type": "living_room",
+   "style_tags": [
+    "classic",
+    "warm",
+    "cozy"
+   ],
+   "name": {
+    "en": "Anniversary Lounge",
+    "fa": "نشیمن کلاسیک سالگرد"
+   },
+   "description": {
+    "en": "A warm classic living room with carpet, floor lamps and soft window light.",
+    "fa": "نشیمنی گرم و کلاسیک با فرش دستباف، چراغ ایستاده و نور ملایم پنجره؛ چیدمانی برای نشستن‌های طولانی."
+   },
+   "panorama": "assets/panoramas/anniversary_lounge.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/anniversary_lounge.jpg",
+   "room_shape": {
+    "width": 4.6,
+    "height": 2.8,
+    "depth": 6.0
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 0.9,
+    "z": 0.0
+   },
+   "initial_view": {
+    "facing": 0.6
+   },
+   "portals": [
+    {
+     "id": "anniversary_lounge_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.02,
+     "pitch": -7.37,
+     "distance": 2.32,
+     "position": [
+      -1.953,
+      1.3,
+      0.247
+     ]
+    }
+   ],
+   "floor_material": "wood",
+   "audio": {
+    "ambient": "room_tone",
+    "reverb": 0.25,
+    "footsteps": "wood"
+   },
+   "attribution": {
+    "creator": "Greg Zaal",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/anniversary_lounge"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "classic",
+   "type_group": "residential",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -1.7,
+     "maxX": 1.7,
+     "minZ": -2.4,
+     "maxZ": 2.4
+    },
+    "obstacles": [
+     {
+      "type": "cylinder",
+      "x": -1.1,
+      "z": -2.35,
+      "r": 0.55,
+      "label": {
+       "en": "Armchair",
+       "fa": "صندلی راحتی"
+      },
+      "h": 0.85,
+      "rot": 0.45,
+      "source": "authored"
+     },
+     {
+      "type": "box",
+      "x": 0.9,
+      "z": 2.75,
+      "hw": 0.85,
+      "hd": 0.3,
+      "label": {
+       "en": "Sideboard",
+       "fa": "بوفه چوبی"
+      },
+      "h": 0.92,
+      "source": "authored"
+     },
+     {
+      "label": {
+       "en": "sofa",
+       "fa": "مبل"
+      },
+      "x": 1.01,
+      "z": -1.41,
+      "type": "cylinder",
+      "r": 1.02,
+      "h": 0.82,
+      "rot": 0.0,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "cabinet",
+       "fa": "کابینت"
+      },
+      "x": 1.67,
+      "z": 1.11,
+      "type": "cylinder",
+      "r": 0.69,
+      "h": 0.92,
+      "rot": 0.0,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "type": "cylinder",
+      "x": -1.5,
+      "z": 1.1,
+      "r": 0.45,
+      "h": 0.85,
+      "rot": 0.0,
+      "label": {
+       "en": "Armchair",
+       "fa": "صندلی راحتی"
+      },
+      "source": "authored",
+      "verified": "vision-audit-2026-11-03"
+     },
+     {
+      "type": "cylinder",
+      "x": -1.5,
+      "z": -0.7,
+      "r": 0.45,
+      "h": 0.85,
+      "rot": 0.0,
+      "label": {
+       "en": "Armchair",
+       "fa": "صندلی راحتی"
+      },
+      "source": "authored",
+      "verified": "vision-audit-2026-11-03"
+     },
+     {
+      "type": "cylinder",
+      "x": -1.05,
+      "z": -1.45,
+      "r": 0.3,
+      "h": 0.5,
+      "rot": 0.0,
+      "label": {
+       "en": "Side Table",
+       "fa": "میز کنار"
+      },
+      "source": "authored",
+      "verified": "vision-audit-2026-11-03"
+     }
+    ]
+   },
+   "measured": {
+    "scale": 4.708,
+    "cam_h_m": 0.895,
+    "ceil_h_m": 2.467,
+    "consistency": 0.566,
+    "box_min_wall_expected_m": 2.3,
+    "wall_rho_min_med_max": [
+     2.31,
+     3.61,
+     9.6
+    ],
+    "method": "dav2-small + guided edge-align + multi-start measured shell v1.6"
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "art_studio",
+   "room_type": "studio",
+   "style_tags": [
+    "artistic",
+    "industrial",
+    "creative"
+   ],
+   "name": {
+    "en": "Painter's Studio",
+    "fa": "استودیوی نقاشی"
+   },
+   "description": {
+    "en": "A creative studio filled with canvases, pigments and daylight.",
+    "fa": "استودیوی نقاش با دیوار منحنی، نقاشی دریایی بزرگ و تیرهای چوبی نمایان؛ فضایی برای خلق اثر."
+   },
+   "panorama": "assets/panoramas/art_studio.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/art_studio.jpg",
+   "room_shape": {
+    "width": 5.0,
+    "height": 3.2,
+    "depth": 7.0
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 1.04,
+    "z": 0.0
+   },
+   "initial_view": {
+    "facing": 0.82
+   },
+   "portals": [
+    {
+     "id": "art_studio_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.058,
+     "pitch": -6.4,
+     "distance": 2.68,
+     "position": [
+      -2.173,
+      1.3,
+      0.829
+     ]
+    }
+   ],
+   "floor_material": "concrete",
+   "audio": {
+    "ambient": "room_tone",
+    "reverb": 0.4,
+    "footsteps": "concrete"
+   },
+   "attribution": {
+    "creator": "Oliksiy Yakovlyev",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/art_studio"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "modern",
+   "type_group": "residential",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -1.9,
+     "maxX": 1.9,
+     "minZ": -2.9,
+     "maxZ": 2.9
+    },
+    "obstacles": [
+     {
+      "type": "cylinder",
+      "x": -1.8,
+      "z": 1.3,
+      "r": 0.65,
+      "label": {
+       "en": "Work Table",
+       "fa": "میز کار"
+      },
+      "source": "authored"
+     },
+     {
+      "type": "box",
+      "x": -0.4,
+      "z": 3.1,
+      "hw": 0.65,
+      "hd": 0.5,
+      "label": {
+       "en": "Studio Stairs",
+       "fa": "پله‌های استودیو"
+      },
+      "source": "authored"
+     },
+     {
+      "label": {
+       "en": "Furniture",
+       "fa": "مبلمان"
+      },
+      "x": 1.86,
+      "z": -2.28,
+      "type": "cylinder",
+      "r": 0.83,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "cabinet",
+       "fa": "کابینت"
+      },
+      "x": 0.16,
+      "z": -1.9,
+      "type": "cylinder",
+      "r": 0.53,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "cabinet",
+       "fa": "کابینت"
+      },
+      "x": 2.03,
+      "z": 2.5,
+      "type": "box",
+      "hw": 0.45,
+      "hd": 0.95,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     }
+    ]
+   },
+   "measured": {
+    "scale": 5.614,
+    "cam_h_m": 1.038,
+    "ceil_h_m": 2.439,
+    "consistency": 0.62,
+    "box_min_wall_expected_m": 2.5,
+    "wall_rho_min_med_max": [
+     1.69,
+     3.47,
+     9.05
+    ],
+    "method": "dav2-small + guided edge-align + multi-start measured shell v1.6"
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "cabin",
+   "room_type": "bedroom",
+   "style_tags": [
+    "cozy",
+    "rustic",
+    "timber"
+   ],
+   "name": {
+    "en": "Forest Cabin Room",
+    "fa": "اتاق کلبه جنگلی"
+   },
+   "description": {
+    "en": "An intimate timber cabin bedroom with warm bedside light.",
+    "fa": "اتاق کلبه‌ای در دل جنگل با موکت طرح‌دار، سقف منحنی و آینه چوب‌قاب؛ گرمای چوب همه‌جا هست."
+   },
+   "panorama": "assets/panoramas/cabin.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/cabin.jpg",
+   "room_shape": {
+    "width": 3.5,
+    "height": 2.4,
+    "depth": 4.6
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 0.75,
+    "z": 0.0
+   },
+   "initial_view": {
+    "facing": 0.35
+   },
+   "portals": [
+    {
+     "id": "cabin_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.355,
+     "pitch": -6.0,
+     "distance": 2.86,
+     "position": [
+      1.535,
+      1.3,
+      1.98
+     ]
+    }
+   ],
+   "floor_material": "wood",
+   "audio": {
+    "ambient": "room_tone",
+    "reverb": 0.2,
+    "footsteps": "wood"
+   },
+   "attribution": {
+    "creator": "Greg Zaal",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/cabin"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "cozy",
+   "type_group": "residential",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -1.15,
+     "maxX": 1.15,
+     "minZ": -1.7,
+     "maxZ": 1.7
+    },
+    "obstacles": [
+     {
+      "type": "box",
+      "x": -1.15,
+      "z": -0.5,
+      "hw": 0.45,
+      "hd": 1.55,
+      "h": 0.55,
+      "rot": 0.0,
+      "label": {
+       "en": "Bunk Bed",
+       "fa": "تخت طبقه‌دار"
+      },
+      "source": "authored",
+      "verified": "vision-audit-2026-11-03"
+     },
+     {
+      "type": "box",
+      "x": 1.0,
+      "z": -1.35,
+      "hw": 0.55,
+      "hd": 0.7,
+      "h": 0.55,
+      "rot": 0.0,
+      "label": {
+       "en": "Bed",
+       "fa": "تخت"
+      },
+      "source": "authored",
+      "verified": "vision-audit-2026-11-03"
+     },
+     {
+      "type": "cylinder",
+      "x": 1.22,
+      "z": 0.19,
+      "r": 0.72,
+      "h": 0.85,
+      "rot": 0.0,
+      "label": {
+       "en": "sofa",
+       "fa": "مبل"
+      },
+      "source": "authored",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "type": "cylinder",
+      "x": 0.75,
+      "z": 0.75,
+      "r": 0.35,
+      "h": 0.45,
+      "rot": 0.0,
+      "label": {
+       "en": "Round Table",
+       "fa": "میز گرد"
+      },
+      "source": "authored",
+      "verified": "vision-audit-2026-11-03"
+     },
+     {
+      "type": "box",
+      "x": 1.25,
+      "z": 1.75,
+      "hw": 0.4,
+      "hd": 0.42,
+      "h": 0.8,
+      "rot": 0.0,
+      "label": {
+       "en": "Cabinet",
+       "fa": "کمد"
+      },
+      "source": "authored"
+     }
+    ]
+   },
+   "measured": {
+    "scale": 3.246,
+    "cam_h_m": 0.75,
+    "ceil_h_m": 1.95,
+    "consistency": 0.698,
+    "box_min_wall_expected_m": 1.75,
+    "wall_rho_min_med_max": [
+     1.48,
+     2.12,
+     7.36
+    ],
+    "method": "dav2-small + guided edge-align + multi-start measured shell v1.6"
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "comfy_cafe",
+   "room_type": "cafe",
+   "style_tags": [
+    "cozy",
+    "commercial",
+    "rustic"
+   ],
+   "name": {
+    "en": "Comfy Café",
+    "fa": "کافه دنج"
+   },
+   "description": {
+    "en": "A cozy café corner with couches, warm lamps and low light.",
+    "fa": "کافه‌ای دنج با پارکت بلوط جناغی، لوستر آهنی سیاه و دیوار آجری سفیدی؛ گرمای متریال طبیعی."
+   },
+   "panorama": "assets/panoramas/comfy_cafe.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/comfy_cafe.jpg",
+   "room_shape": {
+    "width": 5.0,
+    "height": 3.0,
+    "depth": 7.0
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 1.01,
+    "z": 0.0
+   },
+   "initial_view": {
+    "facing": 0.5
+   },
+   "portals": [
+    {
+     "id": "comfy_cafe_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.685,
+     "pitch": -4.5,
+     "distance": 3.81,
+     "position": [
+      1.376,
+      1.3,
+      -3.179
+     ]
+    }
+   ],
+   "floor_material": "wood",
+   "audio": {
+    "ambient": "cafe_murmur",
+    "reverb": 0.45,
+    "footsteps": "wood"
+   },
+   "attribution": {
+    "creator": "Sergej Majboroda",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/comfy_cafe"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "cozy",
+   "type_group": "hospitality",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -1.9,
+     "maxX": 1.9,
+     "minZ": -2.9,
+     "maxZ": 2.9
+    },
+    "obstacles": [
+     {
+      "type": "cylinder",
+      "x": 1.9,
+      "z": 1.9,
+      "r": 0.55,
+      "label": {
+       "en": "Café Table",
+       "fa": "میز کافه"
+      },
+      "source": "authored"
+     },
+     {
+      "label": {
+       "en": "sofa",
+       "fa": "مبل"
+      },
+      "x": -1.3,
+      "z": 0.63,
+      "type": "cylinder",
+      "r": 0.79,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "table",
+       "fa": "میز"
+      },
+      "x": -0.58,
+      "z": 1.6,
+      "type": "cylinder",
+      "r": 0.74,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "sofa",
+       "fa": "مبل"
+      },
+      "x": 0.11,
+      "z": 2.13,
+      "type": "cylinder",
+      "r": 0.99,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "sofa",
+       "fa": "مبل"
+      },
+      "x": -1.82,
+      "z": -1.42,
+      "type": "cylinder",
+      "r": 0.64,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "Plant",
+       "fa": "گیاه"
+      },
+      "x": 2.17,
+      "z": 0.6,
+      "type": "cylinder",
+      "r": 0.38,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "table",
+       "fa": "میز"
+      },
+      "x": -1.27,
+      "z": -2.34,
+      "type": "cylinder",
+      "r": 0.55,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     },
+     {
+      "label": {
+       "en": "sofa",
+       "fa": "مبل"
+      },
+      "x": -0.66,
+      "z": -2.83,
+      "type": "cylinder",
+      "r": 0.61,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     }
+    ]
+   },
+   "measured": {
+    "scale": 5.612,
+    "cam_h_m": 1.015,
+    "ceil_h_m": 2.34,
+    "consistency": 0.584,
+    "box_min_wall_expected_m": 2.5,
+    "wall_rho_min_med_max": [
+     2.26,
+     3.67,
+     11.2
+    ],
+    "method": "dav2-small + guided edge-align + multi-start measured shell v1.6"
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "large_corridor",
+   "room_type": "corridor",
+   "style_tags": [
+    "victorian",
+    "classic"
+   ],
+   "name": {
+    "en": "Grand Entrance Corridor",
+    "fa": "هشتی ورودی بزرگ"
+   },
+   "description": {
+    "en": "A Victorian entrance hall with arched doorways and tiled floor.",
+    "fa": "هشتی ورودی مجلل با در دو لته قوسی، بخاری سفالی تزیینی و پارکت هندسی؛ نخستین برداشت از خانه."
+   },
+   "panorama": "assets/panoramas/large_corridor.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/large_corridor.jpg",
+   "room_shape": {
+    "width": 3.4,
+    "height": 4.2,
+    "depth": 13.0
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 0.7,
+    "z": -1.5
+   },
+   "initial_view": {
+    "facing": 0.596
+   },
+   "portals": [
+    {
+     "id": "large_corridor_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.105,
+     "pitch": -7.94,
+     "distance": 2.15,
+     "position": [
+      -1.423,
+      1.3,
+      -0.396
+     ]
+    }
+   ],
+   "floor_material": "stone",
+   "audio": {
+    "ambient": "hall_air",
+    "reverb": 0.6,
+    "footsteps": "stone"
+   },
+   "attribution": {
+    "creator": "Sergej Majboroda",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/large_corridor"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "classic",
+   "type_group": "heritage",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -1.1,
+     "maxX": 1.1,
+     "minZ": -5.9,
+     "maxZ": 5.9
+    },
+    "obstacles": [
+     {
+      "type": "box",
+      "x": 1.45,
+      "z": 4.9,
+      "hw": 0.45,
+      "hd": 0.45,
+      "label": {
+       "en": "Ceramic Stove",
+       "fa": "بخاری سفالی"
+      },
+      "source": "authored"
+     },
+     {
+      "type": "box",
+      "x": -1.45,
+      "z": 0.7,
+      "hw": 0.45,
+      "hd": 0.45,
+      "label": {
+       "en": "Tiled Stove",
+       "fa": "بخاری کاشی‌کاری"
+      },
+      "source": "authored"
+     }
+    ]
+   },
+   "measured": {
+    "scale": 3.235,
+    "cam_h_m": 0.7,
+    "ceil_h_m": 1.96,
+    "consistency": 0.835,
+    "box_min_wall_expected_m": 1.7,
+    "wall_rho_min_med_max": [
+     1.2,
+     2.09,
+     20.4
+    ],
+    "method": "dav2-small + guided edge-align + multi-start measured shell v1.6"
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "castle_zavelstein_cellar",
+   "room_type": "cellar",
+   "style_tags": [
+    "gothic",
+    "historic",
+    "stone"
+   ],
+   "name": {
+    "en": "Castle Vaulted Cellar",
+    "fa": "سرداب قلعه زاول‌اشتاین"
+   },
+   "description": {
+    "en": "Gothic brick vaults beneath the castle, cool and echoing.",
+    "fa": "سرداب سنگی قلعه با طاق آهنگ، کف سنگ لایی و روزنه‌های عمیق؛ خنکی و سکوت سنگ."
+   },
+   "panorama": "assets/panoramas/castle_zavelstein_cellar.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/castle_zavelstein_cellar.jpg",
+   "room_shape": {
+    "width": 3.6,
+    "height": 2.9,
+    "depth": 10.0
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 1.6,
+    "z": 0.0
+   },
+   "initial_view": {
+    "facing": 0.6
+   },
+   "portals": [
+    {
+     "id": "castle_zavelstein_cellar_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.11,
+     "pitch": -7.32,
+     "distance": 2.34,
+     "position": [
+      -1.53,
+      1.3,
+      1.266
+     ]
+    }
+   ],
+   "floor_material": "stone",
+   "audio": {
+    "ambient": "cellar_drip",
+    "reverb": 0.8,
+    "footsteps": "stone"
+   },
+   "attribution": {
+    "creator": "Andreas Mischok",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/castle_zavelstein_cellar"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "historic",
+   "type_group": "heritage",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -1.2,
+     "maxX": 1.2,
+     "minZ": -4.4,
+     "maxZ": 4.4
+    },
+    "obstacles": []
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "ballroom",
+   "room_type": "hall",
+   "style_tags": [
+    "victorian",
+    "classic",
+    "ornate"
+   ],
+   "name": {
+    "en": "Victorian Ballroom",
+    "fa": "سالن رقص ویکتوریایی"
+   },
+   "description": {
+    "en": "An ornate ballroom with tiled floor, chandeliers and a grand piano.",
+    "fa": "سالن پذیرایی ویکتوریایی با پارکت هندسی، پیانوی سفید و گچ‌بری ظریف؛ شکوه یک دوره کامل."
+   },
+   "panorama": "assets/panoramas/ballroom.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/ballroom.jpg",
+   "room_shape": {
+    "width": 9.0,
+    "height": 5.5,
+    "depth": 14.0
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 1.65,
+    "z": 0.0
+   },
+   "initial_view": {
+    "facing": 0.5
+   },
+   "portals": [
+    {
+     "id": "ballroom_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.335,
+     "pitch": -2.11,
+     "distance": 8.13,
+     "position": [
+      3.962,
+      1.3,
+      6.699
+     ]
+    }
+   ],
+   "floor_material": "stone",
+   "audio": {
+    "ambient": "hall_air",
+    "reverb": 0.7,
+    "footsteps": "stone"
+   },
+   "attribution": {
+    "creator": "Sergej Majboroda",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/ballroom"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "classic",
+   "type_group": "hospitality",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -3.9,
+     "maxX": 3.9,
+     "minZ": -6.4,
+     "maxZ": 6.4
+    },
+    "obstacles": [
+     {
+      "type": "box",
+      "x": -3.6,
+      "z": 2.3,
+      "hw": 0.85,
+      "hd": 1.1,
+      "label": {
+       "en": "Grand Piano",
+       "fa": "پیانو گرند"
+      },
+      "source": "authored"
+     }
+    ]
+   },
+   "measured": {
+    "scale": 10.068,
+    "cam_h_m": 1.649,
+    "ceil_h_m": 4.924,
+    "consistency": 0.412,
+    "box_min_wall_expected_m": 4.5,
+    "wall_rho_min_med_max": [
+     4.4,
+     6.99,
+     22.4
+    ],
+    "method": "dav2-small + guided edge-align + multi-start measured shell v1.6"
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "school_hall",
+   "room_type": "auditorium",
+   "style_tags": [
+    "institutional",
+    "timber",
+    "hall"
+   ],
+   "name": {
+    "en": "Old School Hall",
+    "fa": "تالار مدرسه قدیمی"
+   },
+   "description": {
+    "en": "A wooden-floored assembly hall with a stage and tall windows.",
+    "fa": "تالار اجتماعات مدرسه با سکوی چوبی، قوس پیشانه و سقف بتنی در اکسپوز؛ سادگی صادقانه."
+   },
+   "panorama": "assets/panoramas/school_hall.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/school_hall.jpg",
+   "room_shape": {
+    "width": 9.0,
+    "height": 6.0,
+    "depth": 16.0
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 0.7,
+    "z": 0.0
+   },
+   "initial_view": {
+    "facing": 0.75
+   },
+   "portals": [
+    {
+     "id": "school_hall_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.594,
+     "pitch": -3.17,
+     "distance": 5.42,
+     "position": [
+      4.209,
+      1.3,
+      -2.822
+     ]
+    }
+   ],
+   "floor_material": "wood",
+   "audio": {
+    "ambient": "hall_air",
+    "reverb": 0.6,
+    "footsteps": "wood"
+   },
+   "attribution": {
+    "creator": "Dimitrios Savva, Jarod Guest",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/school_hall"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "historic",
+   "type_group": "heritage",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -3.9,
+     "maxX": 3.9,
+     "minZ": -7.4,
+     "maxZ": 7.4
+    },
+    "obstacles": [
+     {
+      "type": "box",
+      "x": 0.0,
+      "z": -6.8,
+      "hw": 4.5,
+      "hd": 1.6,
+      "label": {
+       "en": "Stage",
+       "fa": "سکوی مدرسه"
+      },
+      "source": "authored"
+     },
+     {
+      "type": "box",
+      "x": 0.0,
+      "z": -4.3,
+      "hw": 3.4,
+      "hd": 0.55,
+      "label": {
+       "en": "Chair Rows",
+       "fa": "ردیف صندلی‌ها"
+      },
+      "source": "authored"
+     },
+     {
+      "label": {
+       "en": "piano",
+       "fa": "پیانو"
+      },
+      "x": -3.52,
+      "z": -0.83,
+      "type": "cylinder",
+      "r": 0.82,
+      "source": "auto",
+      "verified": "vision-2026-11-02"
+     }
+    ]
+   },
+   "measured": {
+    "scale": 4.052,
+    "cam_h_m": 0.7,
+    "ceil_h_m": 2.5,
+    "consistency": 0.653,
+    "box_min_wall_expected_m": 4.5,
+    "wall_rho_min_med_max": [
+     2.83,
+     3.71,
+     25.0
+    ],
+    "method": "dav2-small + guided edge-align + multi-start measured shell v1.6"
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "leipzig_festsaal",
+   "room_type": "banquet_hall",
+   "style_tags": [
+    "renaissance",
+    "civic",
+    "wood",
+    "historic"
+   ],
+   "name": {
+    "en": "Leipzig Old Town Hall",
+    "fa": "تالار خانه شهری لایپزیگ"
+   },
+   "description": {
+    "en": "Renaissance civic halls of 1556 — carved wooden ceilings, portal stonework and merchant grandeur.",
+    "fa": "تالارهای شهری رنسانس ۱۵۵۶؛ سقف چوبی کنده‌کاری، سنگ‌کاری درگاه‌ها و شکوه دوره بازرگانی."
+   },
+   "panorama": "assets/panoramas/leipzig_festsaal.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/leipzig_festsaal.jpg",
+   "room_shape": {
+    "width": 10,
+    "height": 7,
+    "depth": 16
+   },
+   "camera": {
+    "x": 0,
+    "y": 1.6,
+    "z": 0
+   },
+   "initial_view": {
+    "facing": 0.49
+   },
+   "portals": [
+    {
+     "id": "leipzig_festsaal_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.78,
+     "pitch": -2.11,
+     "distance": 8.14,
+     "position": [
+      -1.46,
+      1.3,
+      -7.656
+     ]
+    }
+   ],
+   "floor_material": "wood",
+   "audio": {
+    "ambient": "room_tone",
+    "reverb": 0.5,
+    "footsteps": "wood"
+   },
+   "attribution": {
+    "creator": "Joachim Köhler",
+    "source": "Wikimedia Commons",
+    "license": "CC BY-SA 4.0",
+    "url": "https://commons.wikimedia.org/wiki/Leipzig-Altes-Rathaus-1OG-zw-Festsaal-und-Ratsstube-IMG_6628-8x5B-360x180G-PanoS-04-03-2025.jpg"
+   },
+   "source_platform": "Heritage 360",
+   "style_family": "classic",
+   "type_group": "hospitality",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -4.4,
+     "maxX": 4.4,
+     "minZ": -7.4,
+     "maxZ": 7.4
+    },
+    "obstacles": [
+     {
+      "type": "box",
+      "x": 4.7,
+      "z": 0.3,
+      "hw": 0.32,
+      "hd": 0.95,
+      "label": {
+       "en": "Stone Fireplace",
+       "fa": "شومینه سنگی"
+      },
+      "source": "authored"
+     },
+     {
+      "type": "cylinder",
+      "x": 3.7,
+      "z": -2.7,
+      "r": 0.45,
+      "label": {
+       "en": "Statue",
+       "fa": "مجسمه"
+      },
+      "source": "authored"
+     }
+    ]
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  },
+  {
+   "id": "quadrangle_sunny",
+   "room_type": "courtyard",
+   "style_tags": [
+    "collegiate",
+    "classical",
+    "open_air"
+   ],
+   "name": {
+    "en": "Sunny College Quadrangle",
+    "fa": "حیاط مرکزی کالج"
+   },
+   "description": {
+    "en": "An open collegiate courtyard framed by stone cloisters under the midday sun.",
+    "fa": "حیاط مرکزی کالج با مسیر آجری جناغی، باغ‌بند شاخ‌وبرگ و آلاچیقه چوبی؛ معماری و طبیعت دست‌به‌دست هم."
+   },
+   "panorama": "assets/panoramas/quadrangle_sunny.jpg",
+   "panorama_size": [
+    4096,
+    2048
+   ],
+   "preview": "assets/preview/quadrangle_sunny.jpg",
+   "room_shape": {
+    "width": 24.0,
+    "height": 45.0,
+    "depth": 24.0
+   },
+   "camera": {
+    "x": 0.0,
+    "y": 1.6,
+    "z": 0.0
+   },
+   "initial_view": {
+    "facing": 0.5
+   },
+   "portals": [
+    {
+     "id": "quadrangle_sunny_door",
+     "origin": "vlm_verified_doorway",
+     "fraction": 0.49,
+     "pitch": -1.43,
+     "distance": 12.02,
+     "position": [
+      11.651,
+      1.3,
+      0.733
+     ]
+    }
+   ],
+   "floor_material": "gravel",
+   "audio": {
+    "ambient": "birds_wind",
+    "reverb": 0.05,
+    "footsteps": "gravel"
+   },
+   "attribution": {
+    "creator": "Savva Zakharov",
+    "source": "PolyHaven",
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/quadrangle_sunny"
+   },
+   "source_platform": "PolyHaven",
+   "style_family": "open_air",
+   "type_group": "outdoor",
+   "walk": {
+    "player_radius": 0.3,
+    "bounds": {
+     "minX": -11.4,
+     "maxX": 11.4,
+     "minZ": -11.4,
+     "maxZ": 11.4
+    },
+    "obstacles": [
+     {
+      "type": "box",
+      "x": 0.0,
+      "z": 11.2,
+      "hw": 3.2,
+      "hd": 0.55,
+      "label": {
+       "en": "Manicured Hedge",
+       "fa": "دیوار سبز"
+      },
+      "source": "authored"
+     },
+     {
+      "type": "cylinder",
+      "x": -11.0,
+      "z": 2.5,
+      "r": 0.8,
+      "label": {
+       "en": "Tree",
+       "fa": "درخت"
+      },
+      "source": "authored"
+     },
+     {
+      "type": "cylinder",
+      "x": -11.1,
+      "z": -3.5,
+      "r": 0.8,
+      "label": {
+       "en": "Tree",
+       "fa": "درخت"
+      },
+      "source": "authored"
+     }
+    ]
+   },
+   "badge": {
+    "en": "🌐 4K zero-warp panorama",
+    "fa": "🌐 پانورامای ۴K بدون اعوجاج"
+   }
+  }
+ ]
+}

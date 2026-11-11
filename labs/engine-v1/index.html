@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Panodrome Engine V1.0 — CPU Splat Lab (Spark)</title>
+<!--
+  PANODROME ENGINE UPGRADE V1.0 — isolated Spark test page (PHASE 4/5/6)
+  Fully vendored: no CDN. Production runtime (three 0.160) is NOT touched.
+  Query params:
+    scene=cabin|cafe|studio   splat asset
+    pano=0|1                  immutable 4K pano backdrop layer (default 1)
+    blend=0|1|auto            splat layer blend: forced pano / forced splat / zone-logic (default auto)
+    offset=<m>&dir=+x|-x|+z|-z  spawn camera at test offset
+    fade=<ms>                 crossfade time constant (default 350)
+    safeR=<m>                 safe movement radius (default 1.3)
+-->
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#000;font-family:ui-monospace,Menlo,Consolas,monospace;color:#dfe}
+  canvas{display:block;touch-action:none}
+  #hud{position:fixed;top:8px;left:8px;padding:8px 10px;background:rgba(0,20,10,.72);border:1px solid rgba(80,255,180,.25);
+       border-radius:8px;font-size:11px;line-height:1.5;white-space:pre;z-index:5;pointer-events:none;max-width:46vw}
+  #dpad{position:fixed;right:14px;bottom:16px;z-index:6;display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);gap:4px}
+  #dpad button{background:rgba(0,25,15,.75);border:1px solid rgba(80,255,180,.4);color:#cfe;border-radius:10px;font-size:17px;touch-action:none}
+  #dpad button:active{background:rgba(60,255,170,.35)}
+  #badge{position:fixed;bottom:12px;left:10px;z-index:5;font-size:10px;color:rgba(160,255,210,.65);pointer-events:none}
+  #err{position:fixed;top:8px;right:8px;max-width:44vw;padding:6px 9px;background:rgba(60,0,0,.85);border:1px solid rgba(255,80,80,.5);
+       border-radius:8px;font-size:10px;display:none;white-space:pre-wrap;z-index:9}
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "./vendor/three-0.180.0.module.min.js",
+    "three/addons/": "./vendor/three-addons/",
+    "@sparkjsdev/spark": "./vendor/spark-2.4.0/spark.module.min.js"
+} }
+</script>
+</head>
+<body>
+<div id="hud">booting…</div>
+<div id="err"></div>
+<div id="dpad">
+  <span></span><button data-mv="fwd">▲</button><span></span>
+  <button data-mv="left">◀</button><button data-mv="back">▼</button><button data-mv="right">▶</button>
+</div>
+<div id="badge">Panodrome CPU Splat Engine V1.0 · Spark 2.4.0 · three 0.180 · SPZ v4 · isolated lab ·
+  <a style="color:#9fe8c8" href="./index.html?scene=cabin&pano=1">cabin</a> ·
+  <a style="color:#9fe8c8" href="./index.html?scene=comfy_cafe&pano=1">café</a> ·
+  <a style="color:#9fe8c8" href="./index.html?scene=art_studio&pano=1">studio</a> ·
+  <a style="color:#ffd97f" href="./vq11.html?scene=cabin&gen=v11">VQ 1.1 harness (gen switch + iPhone autotest)</a> ·
+  <a style="color:#c9a6ff" href="./moradi.html">MORADI real-content set (10 Kuula scenes · owner review)</a>
+</div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
