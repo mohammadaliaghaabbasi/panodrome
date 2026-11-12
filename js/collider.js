@@ -26,6 +26,11 @@ export class WalkWorld {
     this.room = room;
     const b = room.walk.bounds;
     this.bounds = { minX: b.minX, maxX: b.maxX, minZ: b.minZ, maxZ: b.maxZ };
+    // EXACT boundary from the walkable-truth engine (docs/16): when present it
+    // replaces the old axis-aligned box, so concave rooms and diagonals are real.
+    const poly = room.walk.polygon;
+    this.polygon = Array.isArray(poly) && poly.length >= 3 ? poly : null;
+    this.ceilingH = room.walk.ceiling_h ?? null;
     this.playerR = room.walk.player_radius ?? 0.3;
     this.obstacles = (room.walk.obstacles || []).map((o) => ({
       type: o.type === "box" ? "box" : "cyl",
@@ -58,16 +63,58 @@ export class WalkWorld {
       return b;
     };
 
-    // ---- walls: axis-separated clamp = classic tangent slide ----
-    const wallN = { "x-": [1, 0], "x+": [-1, 0], "z-": [0, 1], "z+": [0, -1] };
+    // ---- walls ----
     const wallTouch = new Set();
-    if (pos.x < this.bounds.minX) { wallTouch.add("x-"); pos.x = this.bounds.minX; if (vel.x < 0) vel.x = 0; }
-    else if (pos.x > this.bounds.maxX) { wallTouch.add("x+"); pos.x = this.bounds.maxX; if (vel.x > 0) vel.x = 0; }
-    if (pos.z < this.bounds.minZ) { wallTouch.add("z-"); pos.z = this.bounds.minZ; if (vel.y < 0) vel.y = 0; }
-    else if (pos.z > this.bounds.maxZ) { wallTouch.add("z+"); pos.z = this.bounds.maxZ; if (vel.y > 0) vel.y = 0; }
+    let wallNormal = null;
+    if (this.polygon) {
+      // circle vs every boundary SEGMENT: exact for concave polygons and
+      // diagonals. Two passes so a corner push never leaves the capsule stuck
+      // inside the neighbouring edge.
+      const n = this.polygon.length;
+      for (let pass = 0; pass < 2; pass++) {
+        for (let i = 0; i < n; i++) {
+          const a = this.polygon[i], c = this.polygon[(i + 1) % n];
+          const ex = c[0] - a[0], ez = c[1] - a[1];
+          const len2 = ex * ex + ez * ez;
+          if (len2 < 1e-9) continue;
+          let t = ((pos.x - a[0]) * ex + (pos.z - a[1]) * ez) / len2;
+          t = t < 0 ? 0 : t > 1 ? 1 : t;
+          const px = a[0] + ex * t, pz = a[1] + ez * t;
+          let dx = pos.x - px, dz = pos.z - pz;
+          let d = Math.hypot(dx, dz);
+          if (d >= R) continue;
+          let nx, nz;
+          if (d < 1e-6) {
+            // capsule centre exactly on the wall line: push along the inward
+            // normal derived from the polygon winding (CCW -> left is inside)
+            const l = Math.sqrt(len2);
+            nx = -ez / l; nz = ex / l;
+            d = 0;
+          } else {
+            nx = dx / d; nz = dz / d;
+          }
+          const push = R - d;
+          pos.x += nx * push;
+          pos.z += nz * push;
+          const vn = vel.x * nx + vel.y * nz;
+          if (vn < 0) { vel.x -= vn * nx; vel.y -= vn * nz; }
+          if (push > 0.5 * R) { wallTouch.add("e" + i); wallNormal = [nx, nz]; }
+        }
+      }
+    } else {
+      // legacy axis-aligned clamp = classic tangent slide
+      const wallN = { "x-": [1, 0], "x+": [-1, 0], "z-": [0, 1], "z+": [0, -1] };
+      if (pos.x < this.bounds.minX) { wallTouch.add("x-"); pos.x = this.bounds.minX; if (vel.x < 0) vel.x = 0; }
+      else if (pos.x > this.bounds.maxX) { wallTouch.add("x+"); pos.x = this.bounds.maxX; if (vel.x > 0) vel.x = 0; }
+      if (pos.z < this.bounds.minZ) { wallTouch.add("z-"); pos.z = this.bounds.minZ; if (vel.y < 0) vel.y = 0; }
+      else if (pos.z > this.bounds.maxZ) { wallTouch.add("z+"); pos.z = this.bounds.maxZ; if (vel.y > 0) vel.y = 0; }
+      for (const k of wallTouch) {
+        if (!this._wallTouch.has(k)) wallNormal = wallN[k];
+      }
+    }
     for (const k of wallTouch) {
-      if (!this._wallTouch.has(k)) {
-        const [nx, nz] = wallN[k];
+      if (!this._wallTouch.has(k) && wallNormal) {
+        const [nx, nz] = wallNormal;
         bump = bump || fire("wall" + k, {
           label: { en: "Wall", fa: "دیوار" }, nx, nz,
           impact: Math.max(Math.hypot(vel.x, vel.y), 0.25), ob: null,
@@ -136,9 +183,40 @@ export class WalkWorld {
 
   /** True if a world point is inside the walkable area (E2E helper). */
   insideWalkable(x, z, pad = 0) {
+    if (this.polygon) {
+      return pointInPolygon(this.polygon, x, z, pad);
+    }
     return x >= this.bounds.minX - pad && x <= this.bounds.maxX + pad &&
            z >= this.bounds.minZ - pad && z <= this.bounds.maxZ + pad;
   }
+}
+
+/**
+ * Even-odd containment for the engine's floor polygon (CCW, metres).
+ * `pad` shrinks the area so E2E checks stay clear of the wall capsule radius.
+ */
+export function pointInPolygon(poly, x, z, pad = 0) {
+  const n = poly.length;
+  let inside = false;
+  for (let i = 0, j = n - 1; i < n; j = i++) {
+    const [xi, zi] = poly[i];
+    const [xj, zj] = poly[j];
+    if ((zi > z) !== (zj > z)) {
+      const xc = xi + ((z - zi) / (zj - zi)) * (xj - xi);
+      if (x < xc) inside = !inside;
+    }
+  }
+  if (!inside) return false;
+  if (pad === 0) return true;
+  // require pad clearance from every edge
+  for (let i = 0; i < n; i++) {
+    const a = poly[i], b = poly[(i + 1) % n];
+    const ex = b[0] - a[0], ez = b[1] - a[1];
+    const len = Math.hypot(ex, ez) || 1;
+    const d = Math.abs(((x - a[0]) * ez - (z - a[1]) * ex) / len);
+    if (d < pad) return false;
+  }
+  return true;
 }
 
 /* ============================================================ walk FX */

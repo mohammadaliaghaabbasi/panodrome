@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panodrome — Engine Lab (EWA splat · hole-fill composite)</title>
+<style>
+  html,body{margin:0;height:100%;background:#0a0d12;color:#e8eef7;
+    font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;overflow:hidden}
+  #c{position:fixed;inset:0;display:block;touch-action:none}
+  #hud{position:fixed;left:12px;top:12px;padding:10px 12px;border-radius:10px;
+    background:rgba(10,14,20,.74);border:1px solid rgba(160,190,220,.18);
+    backdrop-filter:blur(8px);max-width:360px;white-space:pre-wrap;pointer-events:none}
+  #hud b{color:#9fd0ff;font-weight:600}
+  #hud .k{color:#8fa5bd}
+  #bar{position:fixed;left:12px;right:12px;bottom:12px;padding:8px 12px;border-radius:10px;
+    background:rgba(10,14,20,.74);border:1px solid rgba(160,190,220,.18);
+    display:flex;gap:14px;align-items:center;font-size:12px;pointer-events:none}
+  #meter{flex:1;height:6px;border-radius:3px;background:#1b2431;overflow:hidden}
+  #fill{height:100%;width:0;background:#5ad18a;transition:background .2s}
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three-0.160.0.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">loading…</div>
+<div id="bar">
+  <span class="k">walk</span><span id="dist">0.00 m</span>
+  <div id="meter"><div id="fill"></div></div>
+  <span id="state" class="k">photograph</span>
+</div>
+<script type="module">
+import * as THREE from "three";
+import { loadSplat, createSplat, syncSplatUniforms, sortSplat } from "./js/splat.js?v=7";
+import { loadDepthSphere, makeMaskTexture, updateMask, computeMask }
+  from "./js/holefill.js?v=1";
+
+const R = 0.28;                       // capsule radius, same as collider.js
+const cfg = await (await fetch("data/engine_lab.json")).json();
+const geom = cfg.geometry, app = cfg.appearance, budget = cfg.walk_budget || {};
+
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0d12);
+const camera = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 0.05, 1200);
+camera.rotation.order = "YXZ";
+
+/* ---------------- Lane B1: the photograph, always sharp ---------------- */
+// geometry.source.pano is repo-relative ("public/assets/…"); the lab is served
+// FROM public/, so strip that prefix. A missing photo must never kill the page.
+const panoPath = String(geom.source?.pano || "assets/panoramas/demo_splat.jpg")
+  .replace(/^public\//, "");
+let panoTex = null;
+try {
+  panoTex = await new THREE.TextureLoader().loadAsync(panoPath);
+  panoTex.colorSpace = THREE.SRGBColorSpace;
+  panoTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+} catch (e) {
+  console.warn("panorama failed to load:", panoPath, e);
+}
+const pano = new THREE.Mesh(
+  new THREE.SphereGeometry(500, 128, 96),
+  new THREE.MeshBasicMaterial({ map: panoTex, side: THREE.BackSide, toneMapped: false }));
+pano.frustumCulled = false;
+scene.add(pano);
+
+/* ---------------- Lane B2: the EWA splat ---------------- */
+const splat = await loadSplat(app.asset);
+const points = createSplat(splat, { pixelRatio: Math.min(devicePixelRatio, 2) });
+syncSplatUniforms(points, camera, renderer);
+sortSplat(points, camera);
+scene.add(points);
+
+/* ---------------- Lane C: the disocclusion mask ---------------- */
+const depthUrl = `data/${cfg.room}_depth.bin`;
+let ds = null, maskTex = null;
+try {
+  ds = await loadDepthSphere(depthUrl);
+  ds.maskBuf = new Uint8Array(ds.w * ds.h);
+  maskTex = makeMaskTexture(ds);
+  points.material.uniforms.uMask.value = maskTex;
+} catch (e) {
+  console.warn("no low-res depth for hole-fill:", e);
+}
+
+/* ---------------- truth: metric polygon + obstacles ---------------- */
+const poly = geom.floor_polygon.map(([x, z]) => new THREE.Vector3(x, 0.01, z));
+scene.add(new THREE.Line(
+  new THREE.BufferGeometry().setFromPoints(poly.concat([poly[0]])),
+  new THREE.LineBasicMaterial({ color: 0x6fa8ff })));
+for (const o of geom.obstacles || []) {
+  const m = new THREE.Mesh(
+    new THREE.BoxGeometry(o.extent_xz[0], o.top_y - o.base_y, o.extent_xz[1]),
+    new THREE.MeshBasicMaterial({ color: 0x6fa8ff, wireframe: true,
+      transparent: true, opacity: 0.35 }));
+  m.position.set(o.centre_xz[0], (o.top_y + o.base_y) / 2, o.centre_xz[1]);
+  m.rotation.y = -o.yaw_deg * Math.PI / 180;
+  scene.add(m);
+}
+
+/* ---------------- collision (mirrors collider.js) ---------------- */
+const obstacles = (geom.obstacles || []).map((o) => ({
+  x: o.centre_xz[0], z: o.centre_xz[1],
+  hw: o.extent_xz[0] / 2, hd: o.extent_xz[1] / 2,
+  rot: -o.yaw_deg * Math.PI / 180,
+}));
+
+function resolve(p) {
+  for (let pass = 0; pass < 2; pass++) {
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i], b = poly[(i + 1) % poly.length];
+      const ex = b.x - a.x, ez = b.z - a.z, L2 = ex * ex + ez * ez;
+      if (L2 < 1e-9) continue;
+      let t = ((p.x - a.x) * ex + (p.z - a.z) * ez) / L2;
+      t = Math.max(0, Math.min(1, t));
+      const dx = p.x - (a.x + ex * t), dz = p.z - (a.z + ez * t);
+      const d = Math.hypot(dx, dz);
+      if (d >= R || d < 1e-6) continue;
+      p.x += (dx / d) * (R - d);
+      p.z += (dz / d) * (R - d);
+    }
+    for (const o of obstacles) {
+      const cr = Math.cos(-o.rot), sr = Math.sin(-o.rot);
+      const rx = p.x - o.x, rz = p.z - o.z;
+      const lx = cr * rx - sr * rz, lz = sr * rx + cr * rz;
+      const cx = Math.max(-o.hw, Math.min(o.hw, lx));
+      const cz = Math.max(-o.hd, Math.min(o.hd, lz));
+      const dx = lx - cx, dz = lz - cz;
+      const d = Math.hypot(dx, dz);
+      if (d >= R) continue;
+      if (d < 1e-6) {
+        const px = o.hw + R - Math.abs(lx), pz = o.hd + R - Math.abs(lz);
+        if (px < pz) p.x += (Math.sign(lx) || 1) * px;
+        else p.z += (Math.sign(lz) || 1) * pz;
+      } else {
+        p.x += (dx / d) * (R - d);
+        p.z += (dz / d) * (R - d);
+      }
+    }
+  }
+}
+
+/* ---------------- modes ---------------- */
+/* 1 photo+holes (hole-fill, sharp) · 2 splat only · 3 photo only ·
+   4 crossfade (the old blurry behaviour, for comparison)          */
+let MODE = 1;
+const modeName = () => ["", "photo + holes", "splat only", "photo only",
+                        "crossfade (old)"][MODE];
+
+function applyMode() {
+  pano.visible = MODE !== 2;
+  const u = points.material.uniforms;
+  points.visible = MODE !== 3;
+  u.uUseMask.value = (MODE === 1 && maskTex) ? 1 : 0;
+  u.uOpacity.value = 1;
+}
+
+/* ---------------- input ---------------- */
+const keys = new Set();
+addEventListener("keydown", (e) => {
+  const k = e.key;
+  if (k >= "1" && k <= "4") { MODE = +k; applyMode(); return; }
+  keys.add(k.toLowerCase());
+});
+addEventListener("keyup", (e) => keys.delete(e.key.toLowerCase()));
+let yaw = 0, pitch = 0, dragging = false, lx = 0, ly = 0;
+canvas.addEventListener("pointerdown", (e) => { dragging = true; lx = e.clientX; ly = e.clientY; });
+addEventListener("pointerup", () => { dragging = false; });
+addEventListener("pointermove", (e) => {
+  if (!dragging) return;
+  yaw -= (e.clientX - lx) * 0.0032;
+  pitch = Math.max(-1.4, Math.min(1.4, pitch - (e.clientY - ly) * 0.0032));
+  lx = e.clientX; ly = e.clientY;
+});
+
+/* ---------------- hud ---------------- */
+const hud = document.getElementById("hud");
+const fill = document.getElementById("fill");
+const distEl = document.getElementById("dist");
+const stateEl = document.getElementById("state");
+let maskMs = 0, covered = 1;
+
+function drawHud(d, budgetState) {
+  hud.innerHTML =
+    `<b>${cfg.engine}</b>  ${cfg.level}  ·  mode ${MODE}: ${modeName()}\n` +
+    `splats ${app.splats.toLocaleString()} · invented ${(app.invented_fraction * 100).toFixed(0)}%\n` +
+    `area ${geom.area_m2} m² · ${geom.floor_polygon.length} vtx · ceiling ${geom.ceiling_h} m\n` +
+    `budget 5% ${budget.radius_5pct_m} m · 15% ${budget.radius_15pct_m} m\n` +
+    `mask: ${(covered * 100).toFixed(1)}% photographed · ${maskMs.toFixed(1)} ms\n` +
+    `<span class="k">1</span> photo+holes <span class="k">2</span> splat-only ` +
+    `<span class="k">3</span> photo-only <span class="k">4</span> crossfade(old)\n` +
+    `<span class="k">drag</span> look · <span class="k">WASD</span> walk · ` +
+    `<span class="k">shift</span> run`;
+  distEl.textContent = d.toFixed(2) + " m";
+  fill.style.width = Math.min(100, (d / (budget.radius_15pct_m || 2)) * 100) + "%";
+  fill.style.background = budgetState === 0 ? "#5ad18a"
+    : budgetState === 1 ? "#e8c05a" : "#e8705a";
+  stateEl.textContent = budgetState === 0 ? "photograph"
+    : budgetState === 1 ? "holes appear" : "not photographed";
+}
+
+/* ---------------- loop ---------------- */
+const pos = new THREE.Vector3(0, 0, 0);
+const maskState = { last: null };
+applyMode();
+if (ds) { covered = (updateMask(ds, maskTex, maskState, camera), covered); }
+
+let last = performance.now(), lastSort = 0, lastHud = 0;
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const sp = keys.has("shift") ? 3.2 : 1.7;
+  let f = 0, s = 0;
+  if (keys.has("w") || keys.has("arrowup")) f += 1;
+  if (keys.has("s") || keys.has("arrowdown")) f -= 1;
+  if (keys.has("a") || keys.has("arrowleft")) s -= 1;
+  if (keys.has("d") || keys.has("arrowright")) s += 1;
+  if (f || s) {
+    const len = Math.hypot(f, s) || 1;
+    const sinY = Math.sin(yaw), cosY = Math.cos(yaw);
+    pos.x += ((f / len) * -sinY + (s / len) * cosY) * sp * dt;
+    pos.z += ((f / len) * -cosY + (s / len) * sinY) * sp * dt;
+    resolve(pos);
+  }
+  camera.position.set(pos.x, 0, pos.z);
+  camera.rotation.set(pitch, yaw, 0);
+
+  if (now - lastSort > 220) { sortSplat(points, camera); lastSort = now; }
+  syncSplatUniforms(points, camera, renderer);
+
+  // Lane C: refresh the mask only when the camera really moved
+  if (ds && MODE === 1) {
+    const r = updateMask(ds, maskTex, maskState, camera);
+    if (r && r.ms !== undefined) { maskMs = r.ms; covered = r.covered; }
+  }
+  // mode 4 reproduces the old crossfade, for comparison
+  if (MODE === 4) {
+    const d = Math.hypot(pos.x, pos.z);
+    points.material.uniforms.uOpacity.value = d > 0.05 ? 1 : 0;
+  }
+
+  const d = Math.hypot(pos.x, pos.z);
+  const r5 = budget.radius_5pct_m ?? 1, r15 = budget.radius_15pct_m ?? 2;
+  if (now - lastHud > 200) {
+    drawHud(d, d <= r5 ? 0 : d <= r15 ? 1 : 2);
+    lastHud = now;
+  }
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  syncSplatUniforms(points, camera, renderer);
+});
+
+window.__lab = { splat, points, camera, renderer, geom, budget, pos,
+                 get mode() { return MODE; }, setMode: (m) => { MODE = m; applyMode(); },
+                 maskStats: () => ({ maskMs, covered, hasDepth: !!ds }) };
+</script>
+</body>
+</html>

@@ -629,21 +629,6 @@ body.touch #radar-wrap, body.fa #radar-wrap { bottom: calc(var(--bottom-stack) +
 body.qa-hidden #room-pill, body.qa-hidden #view-actions, body.qa-hidden #mode-bar,
 body.qa-hidden #nav-capsule, body.qa-hidden #bump-toast, body.qa-hidden #radar-wrap,
 body.qa-hidden #wp-chip, body.qa-hidden #joystick,
-body.qa-hidden #ripple-host, body.qa-hidden #qa-labs {
+body.qa-hidden #ripple-host {
   display: none !important;
 }
-
-/* ============================================================
-   OWNER INTERNAL-QA BADGE (2026-11-07) — R&D only, not public UX
-   Links the live site to labs/engine-v1/moradi.html — the 10-scene
-   real-content engine review (Kuula/Mojtaba87, source-attributed).
-   Invisible-luxury: tiny + dim, brightens on hover.
-   ============================================================ */
-#qa-labs{
-  position:fixed; inset-inline-start:14px; bottom:calc(env(safe-area-inset-bottom, 0px) + 12px);
-  z-index:6; display:inline-block; padding:8px 13px; border-radius:999px;
-  font-size:11px; letter-spacing:.02em; text-decoration:none; color:var(--ink-dim);
-  opacity:.8; transition:opacity .25s ease, color .25s ease;
-}
-#qa-labs:hover{ opacity:1; color:var(--ink); }
-@media (pointer: coarse){ #qa-labs{ opacity:.85; } }

@@ -18,7 +18,7 @@
  */
 import * as THREE from "three";
 import { i18n } from "./i18n.js";
-import { buildRoomVolume, prefetchRoom } from "./room.js";
+import { attachSplat, buildRoomVolume, prefetchRoom } from "./room.js";
 import { WalkingControls, FOV_BASE } from "./controls.js";
 import { WalkWorld, WalkFX } from "./collider.js";
 import { Waypoint, computeRoutes, projectToScreen, WALK_IN_DIST } from "./portals.js";
@@ -286,6 +286,11 @@ async function loadRoom(idx) {
   // can never disagree (no walking in the previous room's collision world)
   hud.setLoadProgress(0.15);
   const meshObj = await buildRoomVolume(room, renderer);
+  // appearance lane: a baked 3DGS splat replaces the flat photo shell
+  if (room.appearance && room.appearance.mode === "splat" && room.appearance.asset) {
+    try { await attachSplat(meshObj, room, renderer, camera); }
+    catch (err) { console.warn("[splat] falling back to photo shell:", err); }
+  }
   hud.setLoadProgress(0.85);
 
   if (state.meshObj) {

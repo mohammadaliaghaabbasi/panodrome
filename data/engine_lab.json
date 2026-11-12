@@ -1,0 +1,173 @@
+{
+ "engine": "walkable-truth/1.1.0",
+ "level": "L2",
+ "room": "demo_splat",
+ "eye_height_m": 1.6,
+ "geometry": {
+  "schema": "panodrome.room_geometry/1",
+  "units": "metres",
+  "gravity": {
+   "tilt_deg": 0.003,
+   "yaw_deg": -0.25
+  },
+  "camera_height_m": 1.6,
+  "floor_y": -1.6,
+  "ceiling_h": 2.5,
+  "floor_polygon": [
+   [
+    -2.9811,
+    -2.1251
+   ],
+   [
+    3.0161,
+    -2.0727
+   ],
+   [
+    2.9795,
+    2.1246
+   ],
+   [
+    -3.0177,
+    2.0723
+   ]
+  ],
+  "walls": [
+   {
+    "orientation": "x",
+    "line": -3.0002,
+    "samples": 139
+   },
+   {
+    "orientation": "z",
+    "line": 2.0996,
+    "samples": 221
+   },
+   {
+    "orientation": "x",
+    "line": 2.9994,
+    "samples": 139
+   },
+   {
+    "orientation": "z",
+    "line": -2.1003,
+    "samples": 221
+   }
+  ],
+  "area_m2": 25.175,
+  "obstacles": [
+   {
+    "centre_xz": [
+     1.1722,
+     0.6903
+    ],
+    "yaw_deg": 0.5,
+    "extent_xz": [
+     1.1605,
+     0.5928
+    ],
+    "base_y": -1.5228,
+    "top_y": -0.8457,
+    "points": 6682
+   },
+   {
+    "centre_xz": [
+     -2.1058,
+     1.4375
+    ],
+    "yaw_deg": 0.5,
+    "extent_xz": [
+     0.4425,
+     0.4999
+    ],
+    "base_y": -1.5238,
+    "top_y": -0.4732,
+    "points": 2467
+   }
+  ],
+  "confidence": {
+   "coverage": 0.477,
+   "floor_flat_rms_m": 0.0047,
+   "wall_plumb_deg": 0.018,
+   "manhattan_resid_m": 0.0098,
+   "classified_floor_px": 56432,
+   "classified_wall_px": 129578,
+   "classified_other_px": 19304
+  },
+  "gates": {
+   "floor_flat": true,
+   "wall_plumb": true,
+   "ceiling_height": true,
+   "area": true,
+   "coverage": true,
+   "manhattan": true,
+   "polygon_closed": true,
+   "all_pass": true
+  },
+  "engine": {
+   "id": "walkable-truth",
+   "version": "1.1.0"
+  },
+  "source": {
+   "kind": "measured",
+   "pano": "public/assets/panoramas/demo_splat.jpg",
+   "depth_file": "data/depth/demo_splat.npy",
+   "stage": "synthetic-selftest",
+   "synthetic": true
+  },
+  "walk_budget": {
+   "curve": {
+    "0.25m": 0.001,
+    "0.5m": 0.0014,
+    "1m": 0.0129,
+    "1.5m": 0.0498,
+    "2m": 0.2252,
+    "3m": 0.7339
+   },
+   "curve_worst_azimuth": {
+    "0.25m": 0.0015,
+    "0.5m": 0.0076,
+    "1m": 0.0336,
+    "1.5m": 0.079,
+    "2m": 0.2467,
+    "3m": 0.8694
+   },
+   "radius_5pct_m": 1.5,
+   "radius_15pct_m": 1.79,
+   "worst_radius_5pct_m": 1.18,
+   "policy": "soft",
+   "measured_at_capture": 0.0
+  },
+  "level": "L2"
+ },
+ "appearance": {
+  "mode": "splat",
+  "asset": "assets/splats/demo_splat.ply",
+  "source": "synthetic",
+  "splats": 262144,
+  "engine": "walkable-truth/1.1.0",
+  "invented_fraction": 0.0
+ },
+ "walk_budget": {
+  "curve": {
+   "0.25m": 0.001,
+   "0.5m": 0.0014,
+   "1m": 0.0129,
+   "1.5m": 0.0498,
+   "2m": 0.2252,
+   "3m": 0.7339
+  },
+  "curve_worst_azimuth": {
+   "0.25m": 0.0015,
+   "0.5m": 0.0076,
+   "1m": 0.0336,
+   "1.5m": 0.079,
+   "2m": 0.2467,
+   "3m": 0.8694
+  },
+  "radius_5pct_m": 1.5,
+  "radius_15pct_m": 1.79,
+  "worst_radius_5pct_m": 1.18,
+  "policy": "soft",
+  "measured_at_capture": 0.0
+ }
+}

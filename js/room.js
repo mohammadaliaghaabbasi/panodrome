@@ -22,6 +22,7 @@
  */
 import * as THREE from "three";
 import { GLTFLoader } from "../vendor/GLTFLoader-0.160.0.js";
+import { loadSplat, createSplat, splatScaleFor } from "./splat.js";
 
 /* ---------------------------------------------------------- owner laws */
 export const PANO_SPHERE_RADIUS = 500;   // m  — owner law: SphereGeometry(500, 128, 96)
@@ -259,4 +260,41 @@ export function prefetchRoom(room) {
   }
   const a = new Image();
   a.src = room.panorama;
+}
+
+/* ------------------------------------------------------ splat appearance */
+
+/**
+ * APPEARANCE LANE (docs/17 B2). When a room carries a baked 3DGS splat, the
+ * flat photo shell is switched off and the splat is drawn in its place — the
+ * photographed pixels, lifted into 3D at their measured depth. Collision is
+ * untouched: it still comes from geometry (collider.js), never from here.
+ */
+export async function attachSplat(meshObj, room, renderer, camera) {
+  const url = room.appearance && room.appearance.asset;
+  if (!url) return null;
+  const splat = await loadSplat(url);
+  const points = createSplat(splat, {
+    pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+  });
+  points.name = "panodrome_splat";
+  meshObj.mesh.add(points);                 // mesh already sits at the capture point
+  meshObj.mesh.material.visible = false;    // photo shell off, splat on
+
+  const applyScale = () => {
+    points.material.uniforms.uScale.value = splatScaleFor(camera, renderer);
+  };
+  applyScale();
+  window.addEventListener("resize", applyScale);
+
+  const prevDispose = meshObj.dispose.bind(meshObj);
+  meshObj.dispose = () => {
+    window.removeEventListener("resize", applyScale);
+    points.geometry.dispose();
+    points.material.dispose();
+    prevDispose();
+  };
+  meshObj.splat = points;
+  meshObj.splatCount = splat.count;
+  return points;
 }
