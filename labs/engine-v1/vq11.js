@@ -204,14 +204,30 @@ function step(dt) {
 let sCur = parseFloat(BLEND), sTarget = sCur;
 if (isNaN(sCur)) { sCur = 0; sTarget = 0; }
 function forceBlend(v) { sCur = sTarget = v; splat.opacity = v; splat.visible = v > 0.003 && MODE !== 'pano'; }
+/* 2026-11-12 FIX (owner report: "moving makes the whole view blurry").
+ * The old rule faded the splat to FULL opacity after 5 cm of walking, so the
+ * 4K photograph (8.4 MP) was replaced by ~520k gaussians — a 1/16 sample rate,
+ * i.e. softness by construction, even though the photograph was still valid.
+ *
+ * New rule, same policy as the walkable-truth engine (docs/17 Lane C): while
+ * the camera is inside the MEASURED walk budget the photograph is authoritative
+ * and the splat is NOT shown at all (0 % invented, 100 % sharp). Past the
+ * budget the photograph can no longer explain the view, so the splat fades in
+ * over HOLD_RAMP metres instead of popping.
+ *
+ *   ?hold=0.75  override the budget   ?holdramp=0.45  fade length
+ *   ?fill=1     old behaviour (splat everywhere) for A/B comparison
+ */
 function updateBlend(dt, dist) {
   if (MODE !== 'both') return;
   const b = parseFloat(BLEND);
   if (!isNaN(b)) sTarget = Math.max(0, Math.min(1, b));
   else if (BLEND === 'auto') {
-    if (dist > SAFE_R + 1e-3) sTarget = 0;
-    else if (dist < 0.05) sTarget = 0;
-    else sTarget = 1;
+    const FILL = new URLSearchParams(location.search).get('fill') === '1';
+    const HOLD = parseFloat(new URLSearchParams(location.search).get('hold') || String(SAFE_R));
+    const RAMP = Math.max(0.05, parseFloat(new URLSearchParams(location.search).get('holdramp') || '0.45'));
+    if (FILL) sTarget = dist < 0.05 ? 0 : 1;
+    else sTarget = dist <= HOLD ? 0 : Math.min(1, (dist - HOLD) / RAMP);
   }
   const k = 1 - Math.exp(-dt * (1000 / FADE_MS) * 3);
   sCur += (sTarget - sCur) * k;
