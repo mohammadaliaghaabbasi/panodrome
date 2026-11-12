@@ -23,12 +23,16 @@
  */
 
 import * as THREE from "three";
+import { loadSpz } from "./spz.js";
 
 const SH_C0 = 0.28209479177387814;
 
 /* ------------------------------------------------------------------ parse */
 
 export async function loadSplat(url) {
+  // SPZ is the servable container (~8 B/splat measured vs 68 B as PLY); the
+  // reader returns the same shape, so everything below stays untouched.
+  if (/\.spz(\?|$)/i.test(url)) return await loadSpz(url);
   const buf = await (await fetch(url)).arrayBuffer();
   const head = new Uint8Array(buf);
   const marker = "\nend_header\n";

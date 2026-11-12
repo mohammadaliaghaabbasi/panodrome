@@ -1,0 +1,58 @@
+{
+ "source_ply": "assets/splats/demo_splat.ply",
+ "total_splats": 524288,
+ "container": "spz/2 (gzip, 24-bit fixed positions, DC colour only)",
+ "fractional_bits": 12,
+ "levels": [
+  {
+   "points": 524288,
+   "bytes": 4209356,
+   "bytes_per_splat": 8.03,
+   "level": 0,
+   "stride": 1,
+   "file": "assets/splats/demo_splat_lod0.spz",
+   "px_per_splat": 1.0,
+   "roundtrip": {
+    "checked": 52429,
+    "pos_err_mm_max": 0.1221,
+    "opacity_err_max": 0.0004,
+    "color_err_8bit_max": 1,
+    "scale_rel_err_max_pct": 3.174
+   }
+  },
+  {
+   "points": 262144,
+   "bytes": 2139613,
+   "bytes_per_splat": 8.16,
+   "level": 1,
+   "stride": 2,
+   "file": "assets/splats/demo_splat_lod1.spz",
+   "px_per_splat": 2.0
+  },
+  {
+   "points": 131072,
+   "bytes": 1083756,
+   "bytes_per_splat": 8.27,
+   "level": 2,
+   "stride": 4,
+   "file": "assets/splats/demo_splat_lod2.spz",
+   "px_per_splat": 4.0
+  },
+  {
+   "points": 65536,
+   "bytes": 549271,
+   "bytes_per_splat": 8.38,
+   "level": 3,
+   "stride": 8,
+   "file": "assets/splats/demo_splat_lod3.spz",
+   "px_per_splat": 8.0,
+   "roundtrip": {
+    "checked": 65536,
+    "pos_err_mm_max": 3264.0135,
+    "opacity_err_max": 0.0004,
+    "color_err_8bit_max": 183,
+    "scale_rel_err_max_pct": 339.518
+   }
+  }
+ ]
+}

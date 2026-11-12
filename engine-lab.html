@@ -71,9 +71,34 @@ const pano = new THREE.Mesh(
 pano.frustumCulled = false;
 scene.add(pano);
 
-/* ---------------- Lane B2: the EWA splat ---------------- */
-const splat = await loadSplat(app.asset);
+/* ---------------- Lane B2: the EWA splat (SPZ, LOD tiered) ---------------- */
+// A photographic bake as PLY is 68 B/splat (570 MB for a 4K pano); as SPZ it is
+// ~8 B/splat (measured 4.21 MB for this 524k cloud). The four tiers let a slow
+// link or a weak device take a coarser cloud instead of a 35 MB download.
+const lods = app.lods || [{ level: 0, file: app.asset, points: app.splats }];
+const wantLod = new URLSearchParams(location.search).get("lod");
+const conn = navigator.connection || {};
+/* Tier choice is a real cost decision, so it is explicit:
+ *   saveData                -> coarsest tier (never spend a mobile bundle)
+ *   2g/3g or <= 4 GB RAM    -> lod 2
+ *   strong desktop signals  -> lod 0 (photographic, 1 px/splat)
+ *   everything else         -> lod 1, the tier that is smooth everywhere
+ * ?lod=0..3 still overrides. */
+function autoLod() {
+  if (conn.saveData) return lods.length - 1;
+  const slow = /(^|-)2g$|(^|-)3g$/.test(conn.effectiveType || "");
+  const lowMem = (navigator.deviceMemory || 8) <= 4;
+  if (slow || lowMem) return Math.min(2, lods.length - 1);
+  const strong = (navigator.deviceMemory || 8) >= 8 && (navigator.hardwareConcurrency || 4) >= 8;
+  return strong ? 0 : Math.min(1, lods.length - 1);
+}
+const lodIdx = Math.max(0, Math.min(lods.length - 1,
+  wantLod === null ? autoLod() : (parseInt(wantLod, 10) || 0)));
+const lod = lods[lodIdx];
+const splat = await loadSplat(lod.file);
 const points = createSplat(splat, { pixelRatio: Math.min(devicePixelRatio, 2) });
+window.__lodInfo = () => ({ level: lodIdx, points: splat.count,
+  container: splat.container || "ply", bytes: splat.bytes || null });
 syncSplatUniforms(points, camera, renderer);
 sortSplat(points, camera);
 scene.add(points);
@@ -190,7 +215,9 @@ let maskMs = 0, covered = 1;
 function drawHud(d, budgetState) {
   hud.innerHTML =
     `<b>${cfg.engine}</b>  ${cfg.level}  ·  mode ${MODE}: ${modeName()}\n` +
-    `splats ${app.splats.toLocaleString()} · invented ${(app.invented_fraction * 100).toFixed(0)}%\n` +
+    `splats ${splat.count.toLocaleString()} · lod ${lodIdx} · ${lod.px_per_splat || 1.0} px/splat · ` +
+    `${splat.container || "ply"} ${splat.bytes ? (splat.bytes / 1e6).toFixed(2) + " MB" : ""} · ` +
+    `invented ${(app.invented_fraction * 100).toFixed(0)}%\n` +
     `area ${geom.area_m2} m² · ${geom.floor_polygon.length} vtx · ceiling ${geom.ceiling_h} m\n` +
     `budget 5% ${budget.radius_5pct_m} m · 15% ${budget.radius_15pct_m} m\n` +
     `mask: ${(covered * 100).toFixed(1)}% photographed · ${maskMs.toFixed(1)} ms\n` +
