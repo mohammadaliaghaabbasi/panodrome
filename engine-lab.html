@@ -41,7 +41,7 @@ const R = 0.28;                       // capsule radius, same as collider.js
 // ?v= busts the GitHub Pages CDN cache. Without it a deploy can pair the new
 // page with the previous manifest: the lab then loads the old PLY asset and the
 // LOD tiers look missing even though they are live.
-const cfg = await (await fetch("data/engine_lab.json?v=2")).json();
+const cfg = await (await fetch("data/engine_lab.json?v=3")).json();
 const geom = cfg.geometry, app = cfg.appearance, budget = cfg.walk_budget || {};
 
 const canvas = document.getElementById("c");

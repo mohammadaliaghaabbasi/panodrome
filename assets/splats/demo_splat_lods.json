@@ -6,7 +6,7 @@
  "levels": [
   {
    "points": 524288,
-   "bytes": 4209356,
+   "bytes": 4210446,
    "bytes_per_splat": 8.03,
    "level": 0,
    "stride": 1,
@@ -22,8 +22,8 @@
   },
   {
    "points": 262144,
-   "bytes": 2139613,
-   "bytes_per_splat": 8.16,
+   "bytes": 2140480,
+   "bytes_per_splat": 8.17,
    "level": 1,
    "stride": 2,
    "file": "assets/splats/demo_splat_lod1.spz",
@@ -31,7 +31,7 @@
   },
   {
    "points": 131072,
-   "bytes": 1083756,
+   "bytes": 1084168,
    "bytes_per_splat": 8.27,
    "level": 2,
    "stride": 4,
@@ -40,18 +40,18 @@
   },
   {
    "points": 65536,
-   "bytes": 549271,
-   "bytes_per_splat": 8.38,
+   "bytes": 549918,
+   "bytes_per_splat": 8.39,
    "level": 3,
    "stride": 8,
    "file": "assets/splats/demo_splat_lod3.spz",
    "px_per_splat": 8.0,
    "roundtrip": {
     "checked": 65536,
-    "pos_err_mm_max": 3264.0135,
+    "pos_err_mm_max": 0.1221,
     "opacity_err_max": 0.0004,
-    "color_err_8bit_max": 183,
-    "scale_rel_err_max_pct": 339.518
+    "color_err_8bit_max": 1,
+    "scale_rel_err_max_pct": 3.174
    }
   }
  ]

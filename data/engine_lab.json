@@ -141,35 +141,35 @@
  },
  "appearance": {
   "mode": "splat",
-  "asset": "assets/splats/demo_splat_lod0.spz",
+  "asset": "assets/splats/demo_splat_lod0.spz?v=3",
   "container": "spz/2",
   "lods": [
    {
     "level": 0,
-    "file": "assets/splats/demo_splat_lod0.spz",
+    "file": "assets/splats/demo_splat_lod0.spz?v=3",
     "points": 524288,
-    "bytes": 4210000,
+    "bytes": 4210446,
     "px_per_splat": 1.0
    },
    {
     "level": 1,
-    "file": "assets/splats/demo_splat_lod1.spz",
+    "file": "assets/splats/demo_splat_lod1.spz?v=3",
     "points": 262144,
-    "bytes": 2140000,
+    "bytes": 2140480,
     "px_per_splat": 2.0
    },
    {
     "level": 2,
-    "file": "assets/splats/demo_splat_lod2.spz",
+    "file": "assets/splats/demo_splat_lod2.spz?v=3",
     "points": 131072,
-    "bytes": 1080000,
+    "bytes": 1084168,
     "px_per_splat": 4.0
    },
    {
     "level": 3,
-    "file": "assets/splats/demo_splat_lod3.spz",
+    "file": "assets/splats/demo_splat_lod3.spz?v=3",
     "points": 65536,
-    "bytes": 550000,
+    "bytes": 549918,
     "px_per_splat": 8.0
    }
   ],
